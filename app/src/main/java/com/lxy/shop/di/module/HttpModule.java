@@ -2,9 +2,7 @@ package com.lxy.shop.di.module;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.lxy.shop.BuildConfig;
-import com.lxy.shop.common.base.BaseApplication;
 import com.lxy.shop.common.http.HttpHelper;
 import com.lxy.shop.data.api.ApiService;
 
@@ -17,6 +15,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -28,19 +27,13 @@ public class HttpModule {
 
     @Singleton
     @Provides
-    public ApiService provideApiService(Retrofit retrofit){
-
-        return retrofit.create(ApiService.class);
-    }
-
-    @Singleton
-    @Provides
     public Retrofit provideRetrofit(OkHttpClient okHttpClient){
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(HttpHelper.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(okHttpClient);
         return builder.build();
     }
@@ -73,6 +66,13 @@ public class HttpModule {
                 .build();
     }
 
+    @Provides
+    @Singleton
+    public ApiService provideApiService(Retrofit retrofit){
+
+        return retrofit.create(ApiService.class);
+    }
+
     @Singleton
     @Provides
     public Gson provideGson(){
@@ -83,6 +83,5 @@ public class HttpModule {
         return gson;
 
     }
-
 
 }
