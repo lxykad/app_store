@@ -1,8 +1,8 @@
 package com.lxy.shop.ui.recommend;
 
+import com.lxy.shop.common.rx.BaseBean;
+import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.data.api.ApiService;
-
-import javax.inject.Inject;
 
 import rx.Observable;
 
@@ -20,12 +20,9 @@ public class RecommendModel{
         this.mApiService = mApiService;
     }
 
-    public Observable<AndroidBean> getApps(){
+    public Observable<BaseBean<PageBean<AppBean>>> getApps(){
 
-        //mApiService.getRecommendApps("{'page':0}");
-
-       return mApiService.getAndroid("1");
-
+       return mApiService.getRecommendApps("{'page':0}");
     }
 
 }

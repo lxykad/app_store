@@ -30,7 +30,7 @@ public class HttpModule {
     public Retrofit provideRetrofit(OkHttpClient okHttpClient){
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(HttpHelper.BASE_URL)
+                .baseUrl(ApiService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
