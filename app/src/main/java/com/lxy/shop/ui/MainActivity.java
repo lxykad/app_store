@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity<RecommendPresenter> implements Re
 
     public void testClick(View view){
 
-        Toast.makeText(this,""+mPresenter,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,""+mPresenter,Toast.LENGTH_SHORT).show();
         mPresenter.getAndroidData();
     }
 

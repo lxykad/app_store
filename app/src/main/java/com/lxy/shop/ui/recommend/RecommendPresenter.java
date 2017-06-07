@@ -2,12 +2,13 @@ package com.lxy.shop.ui.recommend;
 
 import com.lxy.shop.common.base.BasePresenter;
 import com.lxy.shop.common.rx.PageBean;
+import com.lxy.shop.common.rx.RxErrorHandler;
 import com.lxy.shop.common.rx.RxHttpResponse;
+import com.lxy.shop.common.rx.observer.ErrorHandObserver;
 import com.lxy.shop.ui.recommend.contract.RecommendContract;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -16,35 +17,19 @@ import io.reactivex.disposables.Disposable;
 
 public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendContract.View> {
 
+    private RxErrorHandler mErrorHandler;
+
     @Inject
-    public RecommendPresenter(RecommendModel mModel, RecommendContract.View mView) {
+    public RecommendPresenter(RecommendModel mModel, RecommendContract.View mView, RxErrorHandler errorHandler) {
         super(mModel, mView);
+        mErrorHandler = errorHandler;
     }
 
     public void getAndroidData() {
 
-        /*mModel.getApps()
-                .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
-                .subscribe(new Subscriber<PageBean<AppBean>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("RecommendPresenter=====err:" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(PageBean<AppBean> pageBean) {
-                        System.out.println("RecommendPresenter=====suc:" + pageBean.getDatas().size());
-                    }
-                });*/
-
         mModel.getApps()
                 .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
-                .subscribe(new Observer<PageBean<AppBean>>() {
+                .subscribe(new ErrorHandObserver<PageBean<AppBean>>(mErrorHandler) {
                     @Override
                     public void onSubscribe(Disposable d) {
 
@@ -52,12 +37,7 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
 
                     @Override
                     public void onNext(PageBean<AppBean> beanPageBean) {
-                        System.out.println("RecommendPresenter=====suc:" + beanPageBean.getDatas().size());
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("RecommendPresenter=====err:" + e.toString());
                     }
 
                     @Override
@@ -65,7 +45,6 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
 
                     }
                 });
-
 
     }
 

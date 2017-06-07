@@ -3,7 +3,9 @@ package com.lxy.shop.di.module;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lxy.shop.BuildConfig;
+import com.lxy.shop.common.base.BaseApplication;
 import com.lxy.shop.common.http.HttpHelper;
+import com.lxy.shop.common.rx.RxErrorHandler;
 import com.lxy.shop.data.api.ApiService;
 
 import java.util.concurrent.TimeUnit;
@@ -27,7 +29,7 @@ public class HttpModule {
 
     @Singleton
     @Provides
-    public Retrofit provideRetrofit(OkHttpClient okHttpClient){
+    public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(ApiService.BASE_URL)
@@ -39,11 +41,11 @@ public class HttpModule {
 
     @Singleton
     @Provides
-    public OkHttpClient provideOkhttpClient(Gson gson){
+    public OkHttpClient provideOkhttpClient(Gson gson) {
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             // log用拦截器
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
@@ -55,7 +57,7 @@ public class HttpModule {
 
         // 如果使用到HTTPS，我们需要创建SSLSocketFactory，并设置到client
         return builder
-          //      .addInterceptor(new CommonParamsInterceptor(BaseApplication.getInstance(),gson))
+                //      .addInterceptor(new CommonParamsInterceptor(BaseApplication.getInstance(),gson))
 
                 // 连接超时时间设置
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -67,20 +69,27 @@ public class HttpModule {
 
     @Provides
     @Singleton
-    public ApiService provideApiService(Retrofit retrofit){
+    public ApiService provideApiService(Retrofit retrofit) {
 
         return retrofit.create(ApiService.class);
     }
 
     @Singleton
     @Provides
-    public Gson provideGson(){
+    public Gson provideGson() {
 
         Gson gson = new GsonBuilder()
                 .create();
 
         return gson;
 
+    }
+
+    @Singleton
+    @Provides
+    public RxErrorHandler provideErrorHandler() {
+
+        return new RxErrorHandler(BaseApplication.getInstance());
     }
 
 }
