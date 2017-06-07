@@ -5,10 +5,10 @@ import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.ui.recommend.AndroidBean;
 import com.lxy.shop.ui.recommend.AppBean;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by lxy on 2017/5/11.

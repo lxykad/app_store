@@ -4,7 +4,7 @@ import com.lxy.shop.common.rx.BaseBean;
 import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.data.api.ApiService;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 
 /**

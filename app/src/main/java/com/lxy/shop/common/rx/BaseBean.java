@@ -10,7 +10,7 @@ public class BaseBean<T> implements Serializable {
 
     public static final int SUCCESS = 1;
 
-    public boolean error;
+    public String message;
     public T data;
     public int status;
 
@@ -18,12 +18,4 @@ public class BaseBean<T> implements Serializable {
         return status == SUCCESS;
     }
 
-    @Override
-    public String toString() {
-        return "BaseBean{" +
-                "error=" + error +
-                ", data=" + data +
-                ", status=" + status +
-                '}';
-    }
 }

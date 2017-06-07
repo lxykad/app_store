@@ -1,10 +1,14 @@
 package com.lxy.shop.common.rx;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import com.lxy.shop.common.exception.ApiException;
+
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 
 /**
  * Created by lxy on 2017/5/20.
@@ -13,7 +17,7 @@ import rx.schedulers.Schedulers;
 
 public class RxHttpResponse {
 
-    public static <T> Observable.Transformer<BaseBean<T> ,T> handResult(){
+    /*public static <T> Observable.Transformer<BaseBean<T>, T> handResult() {
 
         return new Observable.Transformer<BaseBean<T>, T>() {
             @Override
@@ -34,19 +38,58 @@ public class RxHttpResponse {
                                         subscriber.onNext(tBaseBean.data);
                                         subscriber.onCompleted();
 
-                                    }catch (Exception e){
+                                    } catch (Exception e) {
                                         subscriber.onError(e);
                                     }
                                 }
                             });
 
-                        }else {//请求失败
-                            return Observable.error(new Exception());
+                        } else {//请求失败
+                            return Observable.error(new ApiException(tBaseBean.status, tBaseBean.message));
                         }
                     }
                 }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
             }
         };
 
+    }*/
+
+
+    /**
+     * rxjava2 写法
+     * @param <T>
+     * @return
+     */
+
+    public static <T> ObservableTransformer<BaseBean<T>,T> handResult(){
+
+        return new ObservableTransformer<BaseBean<T>, T>() {
+            @Override
+            public ObservableSource<T> apply(io.reactivex.Observable<BaseBean<T>> upstream) {
+
+                return upstream.flatMap(new Function<BaseBean<T>, ObservableSource<T>>() {
+                    @Override
+                    public ObservableSource<T> apply(@NonNull final BaseBean<T> tBaseBean) throws Exception {
+
+                        if (tBaseBean.isStatusOk()) {//请求成功
+
+                            return io.reactivex.Observable.create(new ObservableOnSubscribe<T>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<T> emitter) throws Exception {
+                                    emitter.onNext(tBaseBean.data);
+                                    emitter.onComplete();
+                                }
+                            });
+
+                        } else {//请求失败
+
+                           return io.reactivex.Observable.error(new ApiException(tBaseBean.status,tBaseBean.message));
+                        }
+
+                    }
+                }).subscribeOn(io.reactivex.schedulers.Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
+
 }
