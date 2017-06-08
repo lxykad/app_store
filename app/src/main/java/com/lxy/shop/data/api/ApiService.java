@@ -25,5 +25,4 @@ public interface ApiService {
     public Observable<AndroidBean> getAndroid(@Path("type") String type, @Path("count") int count, @Path("page") int page);
 
 
-
 }

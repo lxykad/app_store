@@ -17,19 +17,17 @@ import io.reactivex.disposables.Disposable;
 
 public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendContract.View> {
 
-    private RxErrorHandler mErrorHandler;
 
     @Inject
-    public RecommendPresenter(RecommendModel mModel, RecommendContract.View mView, RxErrorHandler errorHandler) {
+    public RecommendPresenter(RecommendModel mModel, RecommendContract.View mView) {
         super(mModel, mView);
-        mErrorHandler = errorHandler;
     }
 
     public void getAndroidData() {
 
         mModel.getApps()
                 .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
-                .subscribe(new ErrorHandObserver<PageBean<AppBean>>(mErrorHandler) {
+                .subscribe(new ErrorHandObserver<PageBean<AppBean>>(mContext) {
                     @Override
                     public void onSubscribe(Disposable d) {
 

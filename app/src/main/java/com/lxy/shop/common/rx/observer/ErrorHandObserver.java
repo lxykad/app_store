@@ -1,5 +1,6 @@
 package com.lxy.shop.common.rx.observer;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.lxy.shop.common.exception.BaseException;
@@ -13,8 +14,8 @@ public abstract class ErrorHandObserver<T> extends BaseObserver<T> {
 
     protected RxErrorHandler mErrorHandler = null;
 
-    public ErrorHandObserver(RxErrorHandler handler) {
-        mErrorHandler = handler;
+    public ErrorHandObserver(Context context) {
+       mErrorHandler = new RxErrorHandler(context);
     }
 
     @Override
