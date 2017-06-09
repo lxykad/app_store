@@ -23,7 +23,7 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
         super(mModel, mView);
     }
 
-    public void getAndroidData() {
+    public void getRecommendData() {
 
         mModel.getApps()
                 .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
@@ -34,13 +34,13 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
                     }
 
                     @Override
-                    public void onNext(PageBean<AppBean> beanPageBean) {
-
+                    public void onNext(PageBean<AppBean> bean) {
+                        mView.showResust(bean);
                     }
 
                     @Override
                     public void onComplete() {
-
+                        //mView.dismissLoading();
                     }
                 });
 

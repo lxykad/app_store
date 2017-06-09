@@ -12,11 +12,11 @@ import dagger.Provides;
  */
 
 @Module
-public class ActivityModule {
+public class FragmentModule {
 
     private RecommendContract.View mView;
 
-    public ActivityModule(RecommendContract.View mView) {
+    public FragmentModule(RecommendContract.View mView) {
         this.mView = mView;
     }
 
