@@ -35,21 +35,6 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
     private RecommendAdapter mAdapter;
     private List<AppBean> mList;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recommend, container, false);
-
-        return mBinding.getRoot();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
-
     @Override
     protected void visiableToUser() {
 
@@ -57,6 +42,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
     @Override
     protected void firstVisiableToUser() {
+        System.out.println("RecommendFragment======firstVisiableToUser" );
         init();
         LoadData();
     }
@@ -66,6 +52,24 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
         DaggerFragmentComponent.builder().appComponent(appComponent)
                 .fragmentModule(new FragmentModule(this)).build().inject(this);
     }
+
+    @Override
+    public int getLayoutId() {
+
+        return R.layout.fragment_recommend;
+    }
+
+    @Override
+    public void initChildBinding() {
+        mBinding = (FragmentRecommendBinding) mChildBinding;
+        System.out.println("RecommendFragment======initChild" );
+    }
+
+    @Override
+    public void onEmptyClick(View view) {
+        LoadData();
+    }
+
 
     public void init() {
         mList = new ArrayList<>();
@@ -77,23 +81,13 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 AppBean appBean = mList.get(position);
-                Toast.makeText(view.getContext(),appBean.displayName,Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), appBean.displayName, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void LoadData() {
         mPresenter.getRecommendData();
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void dismissLoading() {
-
     }
 
     @Override
@@ -108,8 +102,4 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
     }
 
-    @Override
-    public void showError(String msg) {
-
-    }
 }

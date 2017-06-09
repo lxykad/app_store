@@ -5,6 +5,7 @@ import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.common.rx.RxErrorHandler;
 import com.lxy.shop.common.rx.RxHttpResponse;
 import com.lxy.shop.common.rx.observer.ErrorHandObserver;
+import com.lxy.shop.common.rx.observer.ProgressObserver;
 import com.lxy.shop.ui.recommend.contract.RecommendContract;
 
 import javax.inject.Inject;
@@ -27,20 +28,10 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
 
         mModel.getApps()
                 .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
-                .subscribe(new ErrorHandObserver<PageBean<AppBean>>(mContext) {
+                .subscribe(new ProgressObserver<PageBean<AppBean>>(mContext, mView) {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(PageBean<AppBean> bean) {
-                        mView.showResust(bean);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        //mView.dismissLoading();
+                    public void onNext(PageBean<AppBean> beanPageBean) {
+                        mView.showResust(beanPageBean);
                     }
                 });
 

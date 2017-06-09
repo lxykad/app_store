@@ -26,7 +26,6 @@ public abstract class ErrorHandObserver<T> extends BaseObserver<T> {
         if (baseException == null) {
 
             e.printStackTrace();
-            Log.d("ErrorHandObserver", e.getMessage());
 
         } else {
             mErrorHandler.showErrorMessage(baseException);
