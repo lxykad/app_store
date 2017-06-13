@@ -1,12 +1,7 @@
 package com.lxy.shop.ui.recommend.fragment;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -20,6 +15,7 @@ import com.lxy.shop.di.module.FragmentModule;
 import com.lxy.shop.ui.recommend.AppBean;
 import com.lxy.shop.ui.recommend.RecommendPresenter;
 import com.lxy.shop.ui.recommend.adapter.RecommendAdapter;
+import com.lxy.shop.ui.recommend.bean.RecommendBean;
 import com.lxy.shop.ui.recommend.contract.RecommendContract;
 
 import java.util.ArrayList;
@@ -73,7 +69,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
     public void init() {
         mList = new ArrayList<>();
-        mAdapter = new RecommendAdapter(R.layout.list_item_recommend_fragment, mList);
+        mAdapter = new RecommendAdapter(R.layout.list_item_recommend_fragment, mList,getContext());
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.recyclerView.setAdapter(mAdapter);
 
@@ -91,10 +87,10 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
     }
 
     @Override
-    public void showResust(PageBean<AppBean> bean) {
+    public void showResust(RecommendBean bean) {
 
-        mAdapter.addItems(bean.getDatas());
-        System.out.println("RecommendFragment======count:" + bean.getDatas().size());
+        mAdapter.addItems(bean.getRecommendApps());
+        System.out.println("RecommendFragment======count:" + bean.getRecommendApps().size());
     }
 
     @Override

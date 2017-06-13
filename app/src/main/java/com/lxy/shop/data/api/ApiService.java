@@ -4,6 +4,7 @@ import com.lxy.shop.common.rx.BaseBean;
 import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.ui.recommend.AndroidBean;
 import com.lxy.shop.ui.recommend.AppBean;
+import com.lxy.shop.ui.recommend.bean.RecommendBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -17,12 +18,15 @@ public interface ApiService {
 
     public static final String BASE_URL = "http://112.124.22.238:8081/course_api/cniaoplay/";
 
-    //推荐
-    @GET("featured2")
-    public Observable<BaseBean<PageBean<AppBean>>> getRecommendApps(@Query("p") String param);
-
     @GET("{type}/{count}/{page}")
     public Observable<AndroidBean> getAndroid(@Path("type") String type, @Path("count") int count, @Path("page") int page);
 
+    //推荐 -- test
+    @GET("featured2")
+    public Observable<BaseBean<PageBean<AppBean>>> getRecommendApps(@Query("p") String param);
 
+
+    //推荐 --- banner
+    @GET("index")
+    public Observable<BaseBean<RecommendBean>> getRecommendData();
 }

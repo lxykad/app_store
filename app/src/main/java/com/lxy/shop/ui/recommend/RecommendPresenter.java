@@ -1,16 +1,20 @@
 package com.lxy.shop.ui.recommend;
 
+import android.Manifest;
+import android.app.Activity;
+
 import com.lxy.shop.common.base.BasePresenter;
 import com.lxy.shop.common.rx.PageBean;
-import com.lxy.shop.common.rx.RxErrorHandler;
 import com.lxy.shop.common.rx.RxHttpResponse;
-import com.lxy.shop.common.rx.observer.ErrorHandObserver;
 import com.lxy.shop.common.rx.observer.ProgressObserver;
+import com.lxy.shop.ui.recommend.bean.RecommendBean;
 import com.lxy.shop.ui.recommend.contract.RecommendContract;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.Disposable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by lxy on 2017/5/11.
@@ -26,12 +30,35 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
 
     public void getRecommendData() {
 
-        mModel.getApps()
-                .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
-                .subscribe(new ProgressObserver<PageBean<AppBean>>(mContext, mView) {
+        RxPermissions rxPermissions = new RxPermissions((Activity) mContext);
+        rxPermissions.request(Manifest.permission.READ_PHONE_STATE)
+                .subscribe(new Consumer<Boolean>() {
                     @Override
-                    public void onNext(PageBean<AppBean> beanPageBean) {
-                        mView.showResust(beanPageBean);
+                    public void accept(@NonNull Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+
+                            /*mModel.getApps()
+                                    .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
+                                    .subscribe(new ProgressObserver<PageBean<AppBean>>(mContext, mView) {
+                                        @Override
+                                        public void onNext(PageBean<AppBean> beanPageBean) {
+                                            mView.showResust(beanPageBean);
+                                        }
+                                    });*/
+
+                            mModel.getRecommend()
+                                    .compose(RxHttpResponse.<RecommendBean>handResult())
+                                    .subscribe(new ProgressObserver<RecommendBean>(mContext, mView) {
+                                        @Override
+                                        public void onNext(RecommendBean recommendBean) {
+                                            mView.showResust(recommendBean);
+                                        }
+                                    });
+
+
+                        } else {
+                            System.out.println("RecommendPresenter=======拒绝");
+                        }
                     }
                 });
 
