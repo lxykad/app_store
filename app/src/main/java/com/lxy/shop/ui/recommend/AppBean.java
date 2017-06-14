@@ -1,12 +1,14 @@
 package com.lxy.shop.ui.recommend;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 
 /**
  * Created by lxy on 2017/5/11.
  */
 
-public class AppBean implements Serializable {
+public class AppBean implements Serializable, MultiItemEntity {
 
     public int adType;
     public int ads;
@@ -33,6 +35,8 @@ public class AppBean implements Serializable {
     public int versionCode;
     public String versionName;
     public int videoId;
+
+    public int mItemType;
 
     @Override
     public String toString() {
@@ -64,4 +68,15 @@ public class AppBean implements Serializable {
                 ", videoId=" + videoId +
                 '}';
     }
+
+    public AppBean(int itemType) {
+        mItemType = itemType;
+    }
+
+    @Override
+    public int getItemType() {
+
+        return mItemType;
+    }
+
 }
