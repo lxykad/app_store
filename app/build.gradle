@@ -65,4 +65,7 @@ dependencies {
         transitive = true
     }
 
+    // banner
+    compile 'com.youth.banner:banner:1.4.9'
+
 }

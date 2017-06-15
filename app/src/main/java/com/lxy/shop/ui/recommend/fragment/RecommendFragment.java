@@ -32,17 +32,20 @@ import java.util.List;
  * Created by lxy on 2017/6/8.
  */
 
-public class RecommendFragment extends BaseFragment<RecommendPresenter> implements RecommendContract.View {
+public class RecommendFragment extends BaseFragment<RecommendPresenter> implements RecommendContract.View, RecommendAdapter.ChildItemClickListener {
 
     private static final int TYPE_BANNER = 1;
     private static final int TYPE_ICON = 2;
     private static final int TYPE_APP_TOP = 3;
     private static final int TYPE_GAME_TOP = 4;
+    private static final int TYPE_APP_LIST = 5;
+    private static final int TYPE_GAME_LIST = 6;
 
     private FragmentRecommendBinding mBinding;
     private List<AppBean> mAppList;
     private List<AppBean> mGameList;
     private DelegateAdapter mDelegateAdapter;
+    private List<DelegateAdapter.Adapter> mDelegateAdapters;
 
     @Override
     protected void visiableToUser() {
@@ -52,7 +55,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
     @Override
     protected void firstVisiableToUser() {
         System.out.println("RecommendFragment======firstVisiableToUser");
-       // init(1,1);
+        // init(1,1);
         LoadData();
     }
 
@@ -97,7 +100,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
         mBinding.recyclerView.setAdapter(mDelegateAdapter);
 
 
-        List<DelegateAdapter.Adapter> adapters = new LinkedList<>();
+        mDelegateAdapters = new LinkedList<>();
 
         //banner
         if (bannerCount > 0) {
@@ -105,9 +108,18 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             //设置复用池的大小
             RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
             mBinding.recyclerView.setRecycledViewPool(pool);
-            pool.setMaxRecycledViews(0,10);
+            pool.setMaxRecycledViews(0, 10);
 
-            adapters.add(new RecommendAdapter(getContext(), new LinearLayoutHelper(), 1) {
+            LinearLayoutHelper helper = new LinearLayoutHelper();
+            helper.setItemCount(1);// 设置布局里Item个数
+           // helper.setPadding(0, 10, 0, 10);// 设置LayoutHelper的子元素相对LayoutHelper边缘的距离
+            helper.setMargin(0, 1, 0, 1);// 设置LayoutHelper边缘相对父控件（即RecyclerView）的距离
+            helper.setBgColor(Color.GRAY);// 设置背景颜色
+            helper.setAspectRatio(2f);// 设置设置布局内每行布局的宽与高的比
+
+            // helper.setDividerHeight(1); // 设置每行Item的距离   LinearLayoutHelper布局的特有属性
+
+            mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, 1, TYPE_BANNER) {
                 @Override
                 public void onViewRecycled(RecommendViewHolder holder) {
                     super.onViewRecycled(holder);
@@ -119,6 +131,9 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     if (viewType == TYPE_BANNER) {
 
                         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_banner, parent, false);
+
+                        setChildClickListener(RecommendFragment.this);
+
                         return new RecommendViewHolder(inflate);
                     }
 
@@ -132,7 +147,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
-                    // super.onBindViewHolder(holder, position);
+                    super.onBindViewHolder(holder, position);
                 }
             });
         }
@@ -143,9 +158,9 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             //设置复用池的大小
             RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
             mBinding.recyclerView.setRecycledViewPool(pool);
-            pool.setMaxRecycledViews(0,10);
+            pool.setMaxRecycledViews(0, 10);
 
-            adapters.add(new RecommendAdapter(getContext(), new LinearLayoutHelper(), 1) {
+            mDelegateAdapters.add(new RecommendAdapter(getContext(), new LinearLayoutHelper(), 1, TYPE_ICON) {
                 @Override
                 public void onViewRecycled(RecommendViewHolder holder) {
                     super.onViewRecycled(holder);
@@ -157,6 +172,9 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     if (viewType == TYPE_ICON) {
 
                         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_icon, parent, false);
+
+                        setChildClickListener(RecommendFragment.this);
+
                         return new RecommendViewHolder(inflate);
                     }
 
@@ -170,26 +188,11 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
-                    TextView tvApp = (TextView) holder.itemView.findViewById(R.id.tv_hot_app);
-                    tvApp.setText("app");
-                    tvApp.setOnClickListener(new View.OnClickListener() {
+                    super.onBindViewHolder(holder, position);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(v.getContext(), "app", Toast.LENGTH_SHORT);
-                        }
-                    });
-
-                    holder.itemView.findViewById(R.id.tv_hot_game).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(v.getContext(), "game", Toast.LENGTH_SHORT);
-                        }
-                    });
-
-                    holder.itemView.findViewById(R.id.tv_hot_theme).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(v.getContext(), "theme", Toast.LENGTH_SHORT);
+                            Toast.makeText(v.getContext(), "item", Toast.LENGTH_SHORT);
                         }
                     });
 
@@ -197,17 +200,25 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             });
         }
 
-        //app top
-        if (mAppList.size()>0) {
+        //热门应用推荐
+        if (mAppList.size() > 0) {
             StickyLayoutHelper helper = new StickyLayoutHelper();
-            helper.setBgColor(Color.parseColor("#ffffff"));
-            adapters.add(new RecommendAdapter(getContext(),helper,1){
+
+            mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, 1, TYPE_APP_TOP) {
                 @Override
                 public RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
                     if (viewType == TYPE_APP_TOP) {
 
                         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_apps_top, parent, false);
+                        inflate.setBackgroundColor(Color.parseColor("#d1d1d1"));
+                        inflate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(v.getContext(), "click", Toast.LENGTH_SHORT);
+                            }
+                        });
+
                         return new RecommendViewHolder(inflate);
                     }
 
@@ -233,20 +244,19 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             //设置复用池的大小
             RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
             mBinding.recyclerView.setRecycledViewPool(pool);
-            pool.setMaxRecycledViews(0,10);
+            pool.setMaxRecycledViews(0, 10);
 
-            LinearLayoutHelper layoutHelper1 = new LinearLayoutHelper();
-            layoutHelper1.setAspectRatio(2.0f);
             LinearLayoutHelper layoutHelper2 = new LinearLayoutHelper();
             layoutHelper2.setAspectRatio(4.0f);
             layoutHelper2.setDividerHeight(10);
             layoutHelper2.setMargin(10, 30, 10, 10);
             layoutHelper2.setPadding(10, 30, 10, 10);
-            layoutHelper2.setBgColor(0xFFF5A623);
-            adapters.add(new RecommendAdapter(getContext(), layoutHelper1, 0));
-            adapters.add(new RecommendAdapter(getContext(), layoutHelper2, mAppList.size()) {
+            //layoutHelper2.setBgColor(0xFFF5A623);
+
+            mDelegateAdapters.add(new RecommendAdapter(getContext(), layoutHelper2, mAppList.size(), TYPE_APP_LIST) {
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
+                    super.onBindViewHolder(holder, position);
                     AppBean appBean = mAppList.get(position);
                     TextView textView = (TextView) holder.itemView.findViewById(R.id.text_title);
                     textView.setText(appBean.displayName);
@@ -260,19 +270,19 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
         }
 
-        //game top
-        if (mAppList.size()>0) {
+        //热门游戏推荐
+        if (mGameList.size() > 0) {
 
             StickyLayoutHelper helper = new StickyLayoutHelper();
-            helper.setBgColor(Color.parseColor("#33ffff"));
 
-            adapters.add(new RecommendAdapter(getContext(),helper,1){
+            mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, 1, TYPE_GAME_TOP) {
                 @Override
                 public RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
                     if (viewType == TYPE_GAME_TOP) {
 
                         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_games_top, parent, false);
+                        inflate.setBackgroundColor(Color.parseColor("#d1d1d1"));
                         return new RecommendViewHolder(inflate);
                     }
 
@@ -299,9 +309,9 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             helper.setDividerHeight(10);
             helper.setMargin(10, 30, 10, 10);
             helper.setPadding(10, 30, 10, 10);
-            helper.setBgColor(0xFFF5A623);
+           // helper.setBgColor(0xFFF5A623);
 
-            adapters.add(new RecommendAdapter(getContext(),helper,mGameList.size()){
+            mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, mGameList.size(), TYPE_GAME_LIST) {
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
@@ -313,7 +323,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             });
         }
 
-        mDelegateAdapter.setAdapters(adapters);
+        mDelegateAdapter.setAdapters(mDelegateAdapters);
 
         setListenerToRootView();
 
@@ -356,4 +366,27 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
     }
 
+    @Override
+    public void setOnClick(View view, int position) {
+
+    }
+
+    @Override
+    public void setOnClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.banner:
+                Toast.makeText(view.getContext(), "banner", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_hot_app:
+                Toast.makeText(view.getContext(), "app", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_hot_game:
+                Toast.makeText(view.getContext(), "game", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_hot_theme:
+                Toast.makeText(view.getContext(), "theme", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }
