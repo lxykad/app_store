@@ -35,17 +35,9 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(@NonNull Boolean aBoolean) throws Exception {
+
                         if (aBoolean) {
-
-                            /*mModel.getApps()
-                                    .compose(RxHttpResponse.<PageBean<AppBean>>handResult())
-                                    .subscribe(new ProgressObserver<PageBean<AppBean>>(mContext, mView) {
-                                        @Override
-                                        public void onNext(PageBean<AppBean> beanPageBean) {
-                                            mView.showResust(beanPageBean);
-                                        }
-                                    });*/
-
+                            
                             mModel.getRecommend()
                                     .compose(RxHttpResponse.<RecommendBean>handResult())
                                     .subscribe(new ProgressObserver<RecommendBean>(mContext, mView) {
@@ -54,7 +46,6 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
                                             mView.showResust(recommendBean);
                                         }
                                     });
-
 
                         } else {
                             System.out.println("RecommendPresenter=======拒绝");

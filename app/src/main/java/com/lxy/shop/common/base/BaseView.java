@@ -7,6 +7,8 @@ package com.lxy.shop.common.base;
 public interface BaseView {
 
     void showLoading();
-    void  showError(String msg);
-    void  dismissLoading();
+
+    void showError(String msg);
+
+    void dismissLoading();
 }

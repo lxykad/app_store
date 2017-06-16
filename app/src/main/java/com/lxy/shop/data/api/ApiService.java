@@ -29,4 +29,15 @@ public interface ApiService {
     //推荐 --- banner
     @GET("index")
     public Observable<BaseBean<RecommendBean>> getRecommendData();
+
+    // 排行
+    @GET("toplist")
+    public Observable<BaseBean<PageBean<AppBean>>> getRankingList(@Query("page") int page);
+
+    //游戏
+    @GET("game")
+    public Observable<BaseBean<PageBean<AppBean>>> getGameList(@Query("page") int page);
+
+    //分类
+
 }
