@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,8 +14,10 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
+import com.bumptech.glide.Glide;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseFragment;
+import com.lxy.shop.common.exception.BaseException;
 import com.lxy.shop.databinding.FragmentRecommendBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.di.component.DaggerFragmentComponent;
@@ -23,6 +27,8 @@ import com.lxy.shop.ui.recommend.RecommendPresenter;
 import com.lxy.shop.ui.recommend.adapter.RecommendAdapter;
 import com.lxy.shop.ui.recommend.bean.RecommendBean;
 import com.lxy.shop.ui.recommend.contract.RecommendContract;
+import com.lxy.shop.widget.BannerImageLoader;
+import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,7 +38,7 @@ import java.util.List;
  * Created by lxy on 2017/6/8.
  */
 
-public class RecommendFragment extends BaseFragment<RecommendPresenter> implements RecommendContract.View, RecommendAdapter.ChildItemClickListener {
+public class RecommendFragment extends BaseFragment<RecommendPresenter> implements RecommendContract.View {
 
     private static final int TYPE_BANNER = 1;
     private static final int TYPE_ICON = 2;
@@ -40,12 +46,14 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
     private static final int TYPE_GAME_TOP = 4;
     private static final int TYPE_APP_LIST = 5;
     private static final int TYPE_GAME_LIST = 6;
+    private String baseImgUrl = "http://file.market.xiaomi.com/mfc/thumbnail/png/w150q80/";
 
     private FragmentRecommendBinding mBinding;
     private List<AppBean> mAppList;
     private List<AppBean> mGameList;
     private DelegateAdapter mDelegateAdapter;
     private List<DelegateAdapter.Adapter> mDelegateAdapters;
+    private RecommendBean mRecommendBean;
 
     @Override
     protected void visiableToUser() {
@@ -112,33 +120,14 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
             LinearLayoutHelper helper = new LinearLayoutHelper();
             helper.setItemCount(1);// 设置布局里Item个数
-           // helper.setPadding(0, 10, 0, 10);// 设置LayoutHelper的子元素相对LayoutHelper边缘的距离
-            helper.setMargin(0, 1, 0, 1);// 设置LayoutHelper边缘相对父控件（即RecyclerView）的距离
+            // helper.setPadding(0, 10, 0, 10);// 设置LayoutHelper的子元素相对LayoutHelper边缘的距离
+           // helper.setMargin(0, 1, 0, 1);// 设置LayoutHelper边缘相对父控件（即RecyclerView）的距离
             helper.setBgColor(Color.GRAY);// 设置背景颜色
-            helper.setAspectRatio(2f);// 设置设置布局内每行布局的宽与高的比
+            helper.setAspectRatio(2.5f);// 设置设置布局内每行布局的宽与高的比
 
             // helper.setDividerHeight(1); // 设置每行Item的距离   LinearLayoutHelper布局的特有属性
 
             mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, 1, TYPE_BANNER) {
-                @Override
-                public void onViewRecycled(RecommendViewHolder holder) {
-                    super.onViewRecycled(holder);
-                }
-
-                @Override
-                public RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-                    if (viewType == TYPE_BANNER) {
-
-                        View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_banner, parent, false);
-
-                        setChildClickListener(RecommendFragment.this);
-
-                        return new RecommendViewHolder(inflate);
-                    }
-
-                    return super.onCreateViewHolder(parent, viewType);
-                }
 
                 @Override
                 public int getItemViewType(int position) {
@@ -148,6 +137,20 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
+
+
+                    List<String> imgList = new ArrayList<String>();
+
+                    Banner banner = (Banner) holder.itemView.findViewById(R.id.banner);
+                    banner.setImageLoader(new BannerImageLoader());
+
+                    for (int i = 0; i < mRecommendBean.getBanners().size(); i++) {
+                        imgList.add(mRecommendBean.getBanners().get(i).getThumbnail());
+                    }
+                    banner.setImages(imgList);
+
+                    banner.start();
+
                 }
             });
         }
@@ -161,25 +164,6 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             pool.setMaxRecycledViews(0, 10);
 
             mDelegateAdapters.add(new RecommendAdapter(getContext(), new LinearLayoutHelper(), 1, TYPE_ICON) {
-                @Override
-                public void onViewRecycled(RecommendViewHolder holder) {
-                    super.onViewRecycled(holder);
-                }
-
-                @Override
-                public RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-                    if (viewType == TYPE_ICON) {
-
-                        View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_icon, parent, false);
-
-                        setChildClickListener(RecommendFragment.this);
-
-                        return new RecommendViewHolder(inflate);
-                    }
-
-                    return super.onCreateViewHolder(parent, viewType);
-                }
 
                 @Override
                 public int getItemViewType(int position) {
@@ -189,10 +173,26 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+                    TextView app = (TextView) holder.itemView.findViewById(R.id.tv_hot_app);
+                    TextView game = (TextView) holder.itemView.findViewById(R.id.tv_hot_game);
+                    TextView theme = (TextView) holder.itemView.findViewById(R.id.tv_hot_theme);
+                    app.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(v.getContext(), "item", Toast.LENGTH_SHORT);
+                            Toast.makeText(v.getContext(), "app", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    game.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(v.getContext(), "game", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    theme.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(v.getContext(), "theme", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -205,25 +205,6 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             StickyLayoutHelper helper = new StickyLayoutHelper();
 
             mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, 1, TYPE_APP_TOP) {
-                @Override
-                public RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-                    if (viewType == TYPE_APP_TOP) {
-
-                        View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_apps_top, parent, false);
-                        inflate.setBackgroundColor(Color.parseColor("#d1d1d1"));
-                        inflate.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(v.getContext(), "click", Toast.LENGTH_SHORT);
-                            }
-                        });
-
-                        return new RecommendViewHolder(inflate);
-                    }
-
-                    return super.onCreateViewHolder(parent, viewType);
-                }
 
                 @Override
                 public int getItemViewType(int position) {
@@ -234,6 +215,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
 
+                    holder.itemView.setBackgroundColor(Color.parseColor("#d1d1d1"));
                 }
             });
         }
@@ -257,14 +239,24 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
-                    AppBean appBean = mAppList.get(position);
-                    TextView textView = (TextView) holder.itemView.findViewById(R.id.text_title);
-                    textView.setText(appBean.displayName);
-                    /*if (position % 2 == 0) {
-                        VirtualLayoutManager.LayoutParams layoutParams = new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
-                        layoutParams.mAspectRatio = 5;
-                        holder.itemView.setLayoutParams(layoutParams);
-                    }*/
+
+                    final AppBean appBean = mAppList.get(position);
+                    Button dl = (Button) holder.itemView.findViewById(R.id.btn_dl);
+                    TextView title = (TextView) holder.itemView.findViewById(R.id.text_title);
+                    TextView size = (TextView) holder.itemView.findViewById(R.id.text_size);
+                    ImageView img = (ImageView) holder.itemView.findViewById(R.id.img_icon);
+
+                    title.setText(appBean.displayName);
+                    size.setText(appBean.apkSize/1024/1024+" M");
+                    Glide.with(getActivity()).load(baseImgUrl+appBean.icon).into(img);
+
+                    dl.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(v.getContext(), appBean.displayName, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             });
 
@@ -276,18 +268,6 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             StickyLayoutHelper helper = new StickyLayoutHelper();
 
             mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, 1, TYPE_GAME_TOP) {
-                @Override
-                public RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-                    if (viewType == TYPE_GAME_TOP) {
-
-                        View inflate = LayoutInflater.from(getContext()).inflate(R.layout.list_item_recommend_games_top, parent, false);
-                        inflate.setBackgroundColor(Color.parseColor("#d1d1d1"));
-                        return new RecommendViewHolder(inflate);
-                    }
-
-                    return super.onCreateViewHolder(parent, viewType);
-                }
 
                 @Override
                 public int getItemViewType(int position) {
@@ -298,6 +278,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
 
+                    holder.itemView.setBackgroundColor(Color.parseColor("#d1d1d1"));
                 }
             });
         }
@@ -309,16 +290,32 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             helper.setDividerHeight(10);
             helper.setMargin(10, 30, 10, 10);
             helper.setPadding(10, 30, 10, 10);
-           // helper.setBgColor(0xFFF5A623);
+            // helper.setBgColor(0xFFF5A623);
 
             mDelegateAdapters.add(new RecommendAdapter(getContext(), helper, mGameList.size(), TYPE_GAME_LIST) {
                 @Override
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
 
-                    AppBean appBean = mGameList.get(position);
-                    TextView textView = (TextView) holder.itemView.findViewById(R.id.text_title);
-                    textView.setText(appBean.displayName);
+                    final AppBean appBean = mGameList.get(position);
+                    Button download = (Button) holder.itemView.findViewById(R.id.btn_dl);
+
+
+                    TextView title = (TextView) holder.itemView.findViewById(R.id.text_title);
+                    TextView size = (TextView) holder.itemView.findViewById(R.id.text_size);
+                    ImageView img = (ImageView) holder.itemView.findViewById(R.id.img_icon);
+
+                    title.setText(appBean.displayName);
+                    size.setText(appBean.apkSize/1024/1024+" M");
+                    Glide.with(getActivity()).load(baseImgUrl+appBean.icon).into(img);
+
+                    download.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(v.getContext(), appBean.displayName, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             });
         }
@@ -340,7 +337,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
     @Override
     public void showResust(RecommendBean bean) {
 
-        // mAdapter.addItems(bean.getRecommendApps());
+        mRecommendBean = bean;
 
         if (mAppList == null) {
             mAppList = new ArrayList<>();
@@ -356,7 +353,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
         mGameList = bean.getRecommendGames();
         init(bean.getBanners().size(), 1);
 
-        //mBinding.recyclerView.getAdapter().notifyDataSetChanged();
+        mBinding.recyclerView.getAdapter().notifyDataSetChanged();
         System.out.println("RecommendFragment======app:" + bean.getRecommendApps().size());
         System.out.println("RecommendFragment======game:" + bean.getRecommendGames().size());
     }
@@ -366,27 +363,4 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
 
     }
 
-    @Override
-    public void setOnClick(View view, int position) {
-
-    }
-
-    @Override
-    public void setOnClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.banner:
-                Toast.makeText(view.getContext(), "banner", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.tv_hot_app:
-                Toast.makeText(view.getContext(), "app", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.tv_hot_game:
-                Toast.makeText(view.getContext(), "game", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.tv_hot_theme:
-                Toast.makeText(view.getContext(), "theme", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
 }

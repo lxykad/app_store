@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="#3f00">
+    android:layout_height="80dp">
 
     <TextView
         android:id="@+id/tv_hot_app"
@@ -10,8 +9,9 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_weight="1"
-        android:drawableTop="@mipmap/ic_launcher"
+        android:drawableTop="@mipmap/icon_app"
         android:gravity="center"
+        android:paddingTop="15dp"
         android:text="热门应用" />
 
     <TextView
@@ -20,8 +20,9 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_weight="1"
-        android:drawableTop="@mipmap/ic_launcher"
+        android:drawableTop="@mipmap/icon_game"
         android:gravity="center"
+        android:paddingTop="15dp"
         android:text="热门游戏" />
 
     <TextView
@@ -30,8 +31,9 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_weight="1"
-        android:drawableTop="@mipmap/ic_launcher"
+        android:drawableTop="@mipmap/icon_top"
         android:gravity="center"
+        android:paddingTop="15dp"
         android:text="热门主题" />
 
 </LinearLayout>
