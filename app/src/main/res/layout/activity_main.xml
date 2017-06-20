@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v4.widget.DrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:lxy="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/draw_layout"
         android:layout_width="match_parent"
@@ -12,10 +13,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.lxy.shop.widget.TemplateTitle
+                android:id="@+id/title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                lxy:canBack="true" />
+
             <com.flyco.tablayout.SlidingTabLayout
                 android:id="@+id/sliding_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_below="@+id/title_layout"
                 android:background="@color/colorPrimary"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"

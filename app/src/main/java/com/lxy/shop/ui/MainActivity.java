@@ -5,7 +5,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseActivity;
@@ -48,6 +47,9 @@ public class MainActivity extends BaseActivity {
 
         mBinding.slidingTabLayout.setViewPager(mBinding.viewPager, mTitles, this, mFragments);
 
+        mBinding.titleLayout.setMoreImg(R.drawable.ic_search_white_24dp);
+        mBinding.titleLayout.setTitleText("应用商店");
+        mBinding.titleLayout.setBackImg(R.drawable.ic_menu_white_24dp);
     }
 
     @Override
@@ -57,6 +59,13 @@ public class MainActivity extends BaseActivity {
 
 
     public void initEvents() {
+        mBinding.titleLayout.setMoreImgAction(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("search");
+            }
+        });
+
         mBinding.navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +83,6 @@ public class MainActivity extends BaseActivity {
 
                         showToast("update");
                         break;
-
-
                     case R.id.menu_message:
 
                         showToast("message");
@@ -83,6 +90,11 @@ public class MainActivity extends BaseActivity {
                     case R.id.menu_setting:
 
                         showToast("setting");
+                        break;
+
+                    case R.id.menu_logout:
+
+                        showToast("logout");
                         break;
                 }
 
