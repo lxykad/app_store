@@ -1,41 +1,37 @@
 package com.lxy.shop.ui.ranking;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseFragment;
-import com.lxy.shop.common.base.BaseView;
 import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.databinding.FragmentRankingBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.di.component.DaggerAppInfoComponent;
-import com.lxy.shop.di.component.DaggerFragmentComponent;
 import com.lxy.shop.di.module.AppInfoMoudle;
-import com.lxy.shop.di.module.FragmentModule;
 import com.lxy.shop.ui.ranking.adapter.RankAdapter;
 import com.lxy.shop.ui.ranking.contract.RankingContract;
 import com.lxy.shop.ui.recommend.AppBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lxy on 2017/6/8.
  */
 
-public class RankingFragment extends BaseFragment<RankingPresenter> implements RankingContract.AppinfoView {
+public class RankingFragment extends BaseFragment<RankingPresenter> implements RankingContract.AppinfoView, BaseQuickAdapter.RequestLoadMoreListener,SwipeRefreshLayout.OnRefreshListener {
 
     private FragmentRankingBinding mRankBinding;
     private RankAdapter mAdapter;
     private List<AppBean> mList;
+    private int mPage;
 
 
     @Override
@@ -56,7 +52,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     }
 
     public void loadData() {
-        mPresenter.getRankData(0);
+        mPresenter.getRankData(mPage);
     }
 
     @Override
@@ -75,10 +71,13 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     public void initChildBinding() {
         mRankBinding = (FragmentRankingBinding) mChildBinding;
         mList = new ArrayList<>();
-        mAdapter = new RankAdapter(R.layout.list_item_recommend_fragment,mList);
+        mAdapter = new RankAdapter(R.layout.list_item_recommend_fragment, mList);
 
         mRankBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRankBinding.recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnLoadMoreListener(this, mRankBinding.recyclerView);
+
+        //mRankBinding.swipRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -88,16 +87,39 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
 
 
     @Override
-    public void showResult(PageBean<AppBean> page) {
-        List<AppBean> list = page.getDatas();
+    public void showResult(PageBean<AppBean> pageBean) {
 
-        mList.clear();
-        mList.addAll(list);
-        mAdapter.notifyDataSetChanged();
+        System.out.println("load_more========page==="+ mPage);
+        List<AppBean> list = pageBean.getDatas();
+
+        if (mPage==0) {
+
+        }
+
+        mAdapter.addData(list);
+        if (pageBean.isHasMore()) {
+            mPage++;
+        }
+        mAdapter.setEnableLoadMore(pageBean.isHasMore());
+
     }
 
     @Override
     public void onLoadMoreComplete() {
+        mAdapter.loadMoreComplete();
+        System.out.println("load_more===========onLoadMoreComplete");
+    }
 
+    @Override
+    public void onLoadMoreRequested() {
+        System.out.println("load_more===========");
+        loadData();
+    }
+
+    @Override
+    public void onRefresh() {
+        System.out.println("load_more===========onRefresh");
+        mPage = 0;
+        loadData();
     }
 }
