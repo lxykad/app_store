@@ -1,8 +1,11 @@
 package com.lxy.shop.ui;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseActivity;
@@ -21,13 +24,19 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding mBinding;
     private ArrayList<Fragment> mFragments;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate() {
+        mBinding = (ActivityMainBinding) mChildBinding;
 
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initData();
+        initEvents();
 
+    }
+
+    @Override
+    protected int setLayoutId() {
+        return R.layout.activity_main;
     }
 
     private void initData() {
@@ -37,12 +46,50 @@ public class MainActivity extends BaseActivity {
         mFragments.add(new GameFragment());
         mFragments.add(new ClassifyFragment());
 
-        mBinding.slidingTabLayout.setViewPager(mBinding.viewPager, mTitles,this,mFragments);
+        mBinding.slidingTabLayout.setViewPager(mBinding.viewPager, mTitles, this, mFragments);
+
     }
 
     @Override
     protected void setActivityComponent(AppComponent appComponent) {
 
+    }
+
+
+    public void initEvents() {
+        mBinding.navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("header");
+            }
+        });
+
+        mBinding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+
+                    case R.id.menu_app_update:
+
+                        showToast("update");
+                        break;
+
+
+                    case R.id.menu_message:
+
+                        showToast("message");
+                        break;
+                    case R.id.menu_setting:
+
+                        showToast("setting");
+                        break;
+                }
+
+
+                return false;
+            }
+        });
     }
 
 

@@ -82,7 +82,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
 
     @Override
     public void onEmptyClick(View view) {
-
+        loadData();
     }
 
 

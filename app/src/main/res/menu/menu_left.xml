@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/menu_app_update"
+        android:icon="@drawable/ic_loop_gray_24dp"
+        android:title="应用更新" />
+
+    <item
+        android:id="@+id/menu_message"
+        android:icon="@drawable/ic_message_gray_24dp"
+        android:title="消息中心" />
+
+    <item
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/ic_setting_gray_24dp"
+        android:title="设置" />
+
+</menu>

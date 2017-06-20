@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.v4.widget.DrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/draw_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.lxy.shop.ui.MainActivity">
 
-        <com.flyco.tablayout.SlidingTabLayout
-            android:id="@+id/sliding_tab_layout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@color/colorPrimary"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            app:tl_indicator_color="#33000000"
-            app:tl_indicator_margin_left="2dp"
-            app:tl_indicator_margin_right="2dp"
-            app:tl_indicator_style="BLOCK"
-            app:tl_indicator_width_equal_title="true"
-            app:tl_tab_space_equal="true" />
+            android:layout_height="match_parent">
 
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
+            <com.flyco.tablayout.SlidingTabLayout
+                android:id="@+id/sliding_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                app:tl_indicator_color="#33000000"
+                app:tl_indicator_margin_left="2dp"
+                app:tl_indicator_margin_right="2dp"
+                app:tl_indicator_style="BLOCK"
+                app:tl_indicator_width_equal_title="true"
+                app:tl_tab_space_equal="true" />
+
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/sliding_tab_layout"
+                android:background="#ffffff" />
+
+
+        </RelativeLayout>
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:layout_below="@+id/sliding_tab_layout"
-            android:background="#ffffff" />
+            android:layout_gravity="start"
+            app:headerLayout="@layout/layout_header"
+            app:menu="@menu/menu_left" />
 
-
-    </RelativeLayout>
+    </android.support.v4.widget.DrawerLayout>
 
 </layout>

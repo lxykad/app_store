@@ -121,7 +121,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
             LinearLayoutHelper helper = new LinearLayoutHelper();
             helper.setItemCount(1);// 设置布局里Item个数
             // helper.setPadding(0, 10, 0, 10);// 设置LayoutHelper的子元素相对LayoutHelper边缘的距离
-           // helper.setMargin(0, 1, 0, 1);// 设置LayoutHelper边缘相对父控件（即RecyclerView）的距离
+            // helper.setMargin(0, 1, 0, 1);// 设置LayoutHelper边缘相对父控件（即RecyclerView）的距离
             helper.setBgColor(Color.GRAY);// 设置背景颜色
             helper.setAspectRatio(2.5f);// 设置设置布局内每行布局的宽与高的比
 
@@ -215,7 +215,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
 
-                    holder.itemView.setBackgroundColor(Color.parseColor("#d1d1d1"));
+                    holder.itemView.setBackgroundColor(Color.parseColor("#39c6c1"));
                 }
             });
         }
@@ -247,8 +247,8 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     ImageView img = (ImageView) holder.itemView.findViewById(R.id.img_icon);
 
                     title.setText(appBean.displayName);
-                    size.setText(appBean.apkSize/1024/1024+" M");
-                    Glide.with(getActivity()).load(baseImgUrl+appBean.icon).into(img);
+                    size.setText(appBean.apkSize / 1024 / 1024 + " M");
+                    Glide.with(getActivity()).load(baseImgUrl + appBean.icon).into(img);
 
                     dl.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -278,7 +278,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                 public void onBindViewHolder(RecommendViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
 
-                    holder.itemView.setBackgroundColor(Color.parseColor("#d1d1d1"));
+                    holder.itemView.setBackgroundColor(Color.parseColor("#39c6c1"));
                 }
             });
         }
@@ -306,8 +306,8 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     ImageView img = (ImageView) holder.itemView.findViewById(R.id.img_icon);
 
                     title.setText(appBean.displayName);
-                    size.setText(appBean.apkSize/1024/1024+" M");
-                    Glide.with(getActivity()).load(baseImgUrl+appBean.icon).into(img);
+                    size.setText(appBean.apkSize / 1024 / 1024 + " M");
+                    Glide.with(getActivity()).load(baseImgUrl + appBean.icon).into(img);
 
                     download.setOnClickListener(new View.OnClickListener() {
                         @Override

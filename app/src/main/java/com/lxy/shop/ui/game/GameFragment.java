@@ -71,7 +71,7 @@ public class GameFragment extends BaseFragment<GamePresenter> implements GameCon
 
     @Override
     public void onEmptyClick(View view) {
-
+        loadData();
     }
 
     public void loadData(){
