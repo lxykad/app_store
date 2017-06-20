@@ -1,6 +1,7 @@
 package com.lxy.shop.di.component;
 
 import com.lxy.shop.di.module.AppInfoMoudle;
+import com.lxy.shop.di.module.GameMoudle;
 import com.lxy.shop.di.scope.ActivityScope;
 import com.lxy.shop.ui.game.GameFragment;
 import com.lxy.shop.ui.ranking.RankingFragment;
@@ -12,9 +13,10 @@ import dagger.Component;
  */
 
 @ActivityScope
-@Component(modules = AppInfoMoudle.class,dependencies = AppComponent.class)
+@Component(modules = AppInfoMoudle.class, dependencies = AppComponent.class)
 public interface AppInfoComponent {
 
     void injectRankFragment(RankingFragment fragment);
-    //void injectGameFragment(GameFragment fragment);
+
+
 }

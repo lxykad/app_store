@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
 
-    private final String[] mTitles = {"推荐", "排行", "游戏", "游戏"};
+    private final String[] mTitles = {"推荐", "排行", "游戏", "分类"};
     private ActivityMainBinding mBinding;
     private ArrayList<Fragment> mFragments;
 
