@@ -4,9 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lxy.shop.BuildConfig;
 import com.lxy.shop.common.base.BaseApplication;
-import com.lxy.shop.common.http.HttpHelper;
 import com.lxy.shop.common.http.ParamsInterceptor;
-import com.lxy.shop.common.rx.RxErrorHandler;
+import com.lxy.shop.common.rx.ErrorHandler;
 import com.lxy.shop.data.api.ApiService;
 
 import java.util.concurrent.TimeUnit;
@@ -88,9 +87,9 @@ public class HttpModule {
 
     @Singleton
     @Provides
-    public RxErrorHandler provideErrorHandler() {
+    public ErrorHandler provideErrorHandler() {
 
-        return new RxErrorHandler(BaseApplication.getInstance());
+        return new ErrorHandler(BaseApplication.getInstance());
     }
 
 }

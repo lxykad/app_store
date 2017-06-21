@@ -23,7 +23,6 @@ import io.reactivex.disposables.Disposable;
 public class GamePresenter extends BasePresenter<GameModel,GameConstract.AppinfoView> {
 
 
-
     @Inject
     public GamePresenter(GameModel mModel, GameConstract.AppinfoView mView) {
         super(mModel, mView);

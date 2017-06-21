@@ -50,5 +50,7 @@ public abstract class ProgressObserver<T> extends ErrorHandObserver<T> {
 
         BaseException baseException = mErrorHandler.handleError(e);
         mView.showError(baseException.getDisplayMessage());
+
+        System.out.println("errormessage====="+baseException.getDisplayMessage());
     }
 }

@@ -152,19 +152,19 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
 
     @Override
     public void showLoading() {
-        System.out.println("RecommendFragment======showLoading" );
+        System.out.println("RecommendFragment======showLoading");
         showProgressLayout();
     }
 
     @Override
     public void dismissLoading() {
-        System.out.println("RecommendFragment======dismissLoading" );
+        System.out.println("RecommendFragment======dismissLoading");
         showContentView();
     }
 
     @Override
     public void showError(String msg) {
-        System.out.println("RecommendFragment======showError" );
+        System.out.println("RecommendFragment======showError===" + msg);
         showEmptyView(msg);
     }
 }

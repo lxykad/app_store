@@ -19,6 +19,7 @@ import io.reactivex.functions.Function;
 public class RxHttpResponse {
 
     /**
+     * 将一种类型的observeable 转换为另一种类型的observeable
      * rxjava2 写法
      *
      * @param <T>

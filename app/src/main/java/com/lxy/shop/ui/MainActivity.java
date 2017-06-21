@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity {
 
     public void initUser() {
 
-        User user = Hawk.get(Constant.USER,null);
+        User user = Hawk.get(Constant.USER, null);
 
         if (user != null) {
 
@@ -140,14 +140,15 @@ public class MainActivity extends BaseActivity {
                     case R.id.menu_logout:
 
 
-                        User user = Hawk.get(Constant.USER,null);
-                        if (user==null) {
+                        User user = Hawk.get(Constant.USER, null);
+                        if (user == null) {
                             showToast("未登录");
-                        }else {
-                           // showToast("退出登录成功");
+                        } else {
+                            showToast("退出登录成功");
                         }
 
-                        //Hawk.put(Constant.USER,null);
+                        Hawk.put(Constant.USER, null);
+                        Hawk.put(Constant.TOKEN, "");
                         EventBus.getDefault().post(new LogoutEvent());
                         break;
                 }

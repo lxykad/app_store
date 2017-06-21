@@ -2,7 +2,7 @@ package com.lxy.shop.common.exception;
 
 public class ErrorMessageFactory {
 
-    public static String create(int code) {
+    public static String getErrorMessage(int code) {
 
         String errorMsg = null;
 
@@ -57,6 +57,11 @@ public class ErrorMessageFactory {
 
             case ApiException.ERROR_API_LOGIN:
                 errorMsg = "用户名或密码错误";
+                break;
+
+            case ApiException.ERROR_TOKEN:
+
+                errorMsg = "登录失效，请重新登录";
                 break;
 
             default:

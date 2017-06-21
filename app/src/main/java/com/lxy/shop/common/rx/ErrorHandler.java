@@ -17,11 +17,11 @@ import retrofit2.HttpException;
  * Created by lxy on 2017/6/7.
  */
 
-public class RxErrorHandler {
+public class ErrorHandler {
 
     private Context mContext;
 
-    public RxErrorHandler(Context context) {
+    public ErrorHandler(Context context) {
 
         this.mContext = context;
     }
@@ -55,14 +55,14 @@ public class RxErrorHandler {
 
         }
 
-        exception.setDisplayMessage(ErrorMessageFactory.create(exception.getCode()));
+        exception.setDisplayMessage(ErrorMessageFactory.getErrorMessage(exception.getCode()));
 
         return exception;
     }
 
     public void showErrorMessage(BaseException e) {
 
-        //Toast.makeText(mContext, e.getDisplayMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, e.getDisplayMessage(), Toast.LENGTH_LONG).show();
 
     }
 }

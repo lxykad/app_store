@@ -9,12 +9,10 @@ import com.lxy.shop.common.base.BaseFragment;
 import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.databinding.FragmentGameBinding;
 import com.lxy.shop.di.component.AppComponent;
-import com.lxy.shop.di.component.DaggerAppInfoComponent;
 import com.lxy.shop.di.component.DaggerGameComponent;
 import com.lxy.shop.di.module.GameMoudle;
 import com.lxy.shop.ui.game.adapter.GameAdapter;
 import com.lxy.shop.ui.game.constract.GameConstract;
-import com.lxy.shop.ui.ranking.adapter.RankAdapter;
 import com.lxy.shop.ui.recommend.AppBean;
 
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ import java.util.List;
  */
 
 public class GameFragment extends BaseFragment<GamePresenter> implements GameConstract.AppinfoView ,BaseQuickAdapter.RequestLoadMoreListener{
-
 
     private FragmentGameBinding mBinding;
     private GameAdapter mAdapter;

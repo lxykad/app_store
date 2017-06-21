@@ -1,9 +1,9 @@
 package com.lxy.shop.ui.login;
 
 import android.graphics.Color;
+import android.view.View;
 
-import com.blankj.utilcode.util.CacheUtils;
-import com.jakewharton.rxbinding2.InitialValueObservable;
+import com.blankj.utilcode.util.LogUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lxy.shop.R;
@@ -22,7 +22,6 @@ import com.orhanobut.hawk.Hawk;
 import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
@@ -53,15 +52,20 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showLoading() {
-
+        LogUtils.d("LoginActivity=====", "showLoading");
+        mBinding.loginProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showError(String msg) {
+        LogUtils.d("LoginActivity=====error", msg);
+        showToast(msg);
     }
 
     @Override
     public void dismissLoading() {
+        LogUtils.d("LoginActivity=====", "dismissLoading");
+        mBinding.loginProgress.setVisibility(View.GONE);
     }
 
     @Override
@@ -69,8 +73,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
         //CacheUtils.getInstance().put(Constant.USER, bean.user);
         //CacheUtils.getInstance().put(Constant.TOKEN, bean.token);
-        Hawk.put(Constant.USER,bean.user);
-        Hawk.put(Constant.TOKEN,bean.token);
+        Hawk.put(Constant.USER, bean.user);
+        Hawk.put(Constant.TOKEN, bean.token);
 
         EventBus.getDefault().post(bean.user);
         super.finish();
