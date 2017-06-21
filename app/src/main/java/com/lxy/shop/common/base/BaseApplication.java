@@ -2,10 +2,12 @@ package com.lxy.shop.common.base;
 
 import android.app.Application;
 
+import com.blankj.utilcode.util.Utils;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.di.component.DaggerAppComponent;
 import com.lxy.shop.di.module.AppModule;
 import com.lxy.shop.di.module.HttpModule;
+import com.orhanobut.hawk.Hawk;
 
 /**
  * Created by lxy on 2017/5/11.
@@ -28,6 +30,8 @@ public class BaseApplication extends Application {
 
         sInstance = this;
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).httpModule(new HttpModule()).build();
+        Utils.init(this);
+        Hawk.init(this).build();
 
     }
 

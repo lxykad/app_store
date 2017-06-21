@@ -3,6 +3,7 @@ package com.lxy.shop.ui.game;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseFragment;
 import com.lxy.shop.common.rx.PageBean;
@@ -23,7 +24,7 @@ import java.util.List;
  * Created by lxy on 2017/6/8.
  */
 
-public class GameFragment extends BaseFragment<GamePresenter> implements GameConstract.AppinfoView {
+public class GameFragment extends BaseFragment<GamePresenter> implements GameConstract.AppinfoView ,BaseQuickAdapter.RequestLoadMoreListener{
 
 
     private FragmentGameBinding mBinding;
@@ -74,9 +75,8 @@ public class GameFragment extends BaseFragment<GamePresenter> implements GameCon
         loadData();
     }
 
-    public void loadData(){
-        System.out.println("loaddata====gamelist");
-       mPresenter.getGameList(mPage);
+    public void loadData() {
+        mPresenter.getGameList(mPage);
     }
 
     @Override
@@ -84,11 +84,23 @@ public class GameFragment extends BaseFragment<GamePresenter> implements GameCon
         mList = pageBean.getDatas();
         mAdapter.addData(mList);
 
+        if (pageBean.isHasMore()) {
+            mPage++;
+        }
+
         mAdapter.setEnableLoadMore(pageBean.isHasMore());
+        mAdapter.setOnLoadMoreListener(this, mBinding.recyclerView);
+
     }
 
     @Override
     public void onLoadMoreComplete() {
         mAdapter.loadMoreComplete();
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+
+        loadData();
     }
 }

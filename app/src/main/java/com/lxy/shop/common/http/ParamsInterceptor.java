@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import com.lxy.shop.common.constant.Constant;
 import com.lxy.shop.common.util.DensityUtil;
 import com.lxy.shop.common.util.DeviceUtils;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,7 +32,6 @@ public class ParamsInterceptor implements Interceptor {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-
     private Gson mGson;
     private Context mContext;
 
@@ -51,7 +51,6 @@ public class ParamsInterceptor implements Interceptor {
         try {
             String method = request.method();
 
-
             HashMap<String, Object> commomParamsMap = new HashMap<>();
 
             commomParamsMap.put(Constant.IMEI, DeviceUtils.getIMEI(mContext));
@@ -62,12 +61,12 @@ public class ParamsInterceptor implements Interceptor {
             commomParamsMap.put(Constant.SDK, DeviceUtils.getBuildVersionSDK() + "");
             commomParamsMap.put(Constant.DENSITY_SCALE_FACTOR, mContext.getResources().getDisplayMetrics().density + "");
 
+            String token = Hawk.get(Constant.TOKEN, "");
+            commomParamsMap.put(Constant.TOKEN, token);
 
             if (method.equals("GET")) {
 
-
                 HttpUrl httpUrl = request.url();
-
 
                 HashMap<String, Object> rootMap = new HashMap<>();
 

@@ -89,7 +89,6 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     @Override
     public void showResult(PageBean<AppBean> pageBean) {
 
-        System.out.println("load_more========page==="+ mPage);
         List<AppBean> list = pageBean.getDatas();
 
         if (mPage==0) {

@@ -2,12 +2,16 @@ package com.lxy.shop.data.api;
 
 import com.lxy.shop.common.rx.BaseBean;
 import com.lxy.shop.common.rx.PageBean;
+import com.lxy.shop.ui.login.bean.LoginBean;
+import com.lxy.shop.ui.login.bean.LoginRequestBean;
 import com.lxy.shop.ui.recommend.AndroidBean;
 import com.lxy.shop.ui.recommend.AppBean;
 import com.lxy.shop.ui.recommend.bean.RecommendBean;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -40,4 +44,7 @@ public interface ApiService {
 
     //分类
 
+    //登录
+    @POST("login")
+    Observable<BaseBean<LoginBean>> login(@Body LoginRequestBean param);
 }
