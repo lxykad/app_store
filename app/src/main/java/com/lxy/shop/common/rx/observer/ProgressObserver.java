@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.MediaController;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.lxy.shop.common.base.BaseView;
 import com.lxy.shop.common.exception.BaseException;
 
@@ -51,6 +52,6 @@ public abstract class ProgressObserver<T> extends ErrorHandObserver<T> {
         BaseException baseException = mErrorHandler.handleError(e);
         mView.showError(baseException.getDisplayMessage());
 
-        System.out.println("errormessage====="+baseException.getDisplayMessage());
+        LogUtils.d("errormessage====="+baseException.getDisplayMessage());
     }
 }

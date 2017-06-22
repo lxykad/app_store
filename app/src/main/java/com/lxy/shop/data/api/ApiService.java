@@ -2,11 +2,14 @@ package com.lxy.shop.data.api;
 
 import com.lxy.shop.common.rx.BaseBean;
 import com.lxy.shop.common.rx.PageBean;
+import com.lxy.shop.ui.classify.bean.ClassifyBean;
 import com.lxy.shop.ui.login.bean.LoginBean;
 import com.lxy.shop.ui.login.bean.LoginRequestBean;
 import com.lxy.shop.ui.recommend.AndroidBean;
 import com.lxy.shop.ui.recommend.AppBean;
 import com.lxy.shop.ui.recommend.bean.RecommendBean;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -43,6 +46,8 @@ public interface ApiService {
     public Observable<BaseBean<PageBean<AppBean>>> getGameList(@Query("page") int page);
 
     //分类
+    @GET("category")
+    Observable<BaseBean<List<ClassifyBean>>> getCategories();
 
     //登录
     @POST("login")

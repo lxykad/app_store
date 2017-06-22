@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.lxy.shop.R;
 import com.lxy.shop.databinding.ContentMultiStatusBinding;
@@ -166,5 +167,9 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public void showError(String msg) {
         System.out.println("RecommendFragment======showError===" + msg);
         showEmptyView(msg);
+    }
+
+    public void showToast(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }
