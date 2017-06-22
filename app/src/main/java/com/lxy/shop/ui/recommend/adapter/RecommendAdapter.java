@@ -23,10 +23,7 @@ public class RecommendAdapter extends DelegateAdapter.Adapter<RecommendAdapter.R
     private static final int TYPE_APP_LIST = 5;
     private static final int TYPE_GAME_LIST = 6;
 
-
     private Context mContext;
-    //private String baseImgUrl = "http://file.market.xiaomi.com/mfc/thumbnail/png/w150q80/";
-
 
     private LayoutHelper mLayoutHelper;
     private RecyclerView.LayoutParams mLayoutParams;

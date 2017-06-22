@@ -2,9 +2,7 @@ package com.lxy.shop.ui.recommend.fragment;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,11 +15,11 @@ import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
 import com.bumptech.glide.Glide;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseFragment;
-import com.lxy.shop.common.exception.BaseException;
 import com.lxy.shop.databinding.FragmentRecommendBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.di.component.DaggerFragmentComponent;
 import com.lxy.shop.di.module.FragmentModule;
+import com.lxy.shop.ui.detail.AppDetailActivity;
 import com.lxy.shop.ui.recommend.AppBean;
 import com.lxy.shop.ui.recommend.RecommendPresenter;
 import com.lxy.shop.ui.recommend.adapter.RecommendAdapter;
@@ -257,6 +255,13 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                         }
                     });
 
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AppDetailActivity.startActivity(getContext());
+                        }
+                    });
+
                 }
             });
 
@@ -313,6 +318,13 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(v.getContext(), appBean.displayName, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AppDetailActivity.startActivity(getContext());
                         }
                     });
 

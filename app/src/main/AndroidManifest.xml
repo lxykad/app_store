@@ -35,6 +35,9 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".ui.detail.AppDetailActivity"
+            android:theme="@style/Activity.Transparent" />
     </application>
 
 </manifest>

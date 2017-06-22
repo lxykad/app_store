@@ -14,6 +14,7 @@ import com.lxy.shop.databinding.FragmentRankingBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.di.component.DaggerAppInfoComponent;
 import com.lxy.shop.di.module.AppInfoMoudle;
+import com.lxy.shop.ui.detail.AppDetailActivity;
 import com.lxy.shop.ui.ranking.adapter.RankAdapter;
 import com.lxy.shop.ui.ranking.contract.RankingContract;
 import com.lxy.shop.ui.recommend.AppBean;
@@ -78,6 +79,15 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
         mAdapter.setOnLoadMoreListener(this, mRankBinding.recyclerView);
 
         //mRankBinding.swipRefreshLayout.setOnRefreshListener(this);
+
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                AppBean appBean = mList.get(position);
+
+                AppDetailActivity.startActivity(getContext());
+            }
+        });
     }
 
     @Override
