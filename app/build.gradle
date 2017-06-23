@@ -1,26 +1,83 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
     defaultConfig {
-        applicationId "com.lxy.shop"
-        minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        applicationId "com.caimi.gdd"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        jackOptions {
+            enabled true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/',
+                    'src/main/res/layout/activity',
+                    'src/main/res/layout/fragment',
+            ]
+        }
     }
 
     dataBinding {
         enabled = true
     }
 
+    signingConfigs{
+        keystore{
+          //  defaultSignConfig
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            debuggable true
+           // signingConfig signingConfigs.defaultSignConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "bool", "DEBUG", 'true'
+            resValue "bool", "FLAVOR", 'false'
+            resValue "bool", "LOG", 'true'
+            zipAlignEnabled false
+            shrinkResources false
+
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a"
+            }
         }
+
+        debug {
+            applicationIdSuffix "debug"
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "bool", "DEBUG", 'true'
+            resValue "bool", "FLAVOR", 'false'
+            resValue "bool", "LOG", 'true'
+            zipAlignEnabled false
+            shrinkResources false
+
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a"
+            }
+        }
+
     }
 }
 
@@ -63,7 +120,7 @@ dependencies {
     compile 'jp.wasabeef:glide-transformations:2.0.1'
 
     // vlayout
-    compile ('com.alibaba.android:vlayout:1.0.7@aar') {
+    compile('com.alibaba.android:vlayout:1.0.7@aar') {
         transitive = true
     }
 
