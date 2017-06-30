@@ -14,6 +14,7 @@ import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
 import com.bumptech.glide.Glide;
 import com.lxy.shop.R;
+import com.lxy.shop.common.base.BaseApplication;
 import com.lxy.shop.common.base.BaseFragment;
 import com.lxy.shop.databinding.FragmentRecommendBinding;
 import com.lxy.shop.di.component.AppComponent;
@@ -258,7 +259,9 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AppDetailActivity.startActivity(getContext());
+                            View itemView = holder.itemView;
+                            BaseApplication.getInstance().setView(itemView);
+                            AppDetailActivity.startActivity(getContext(),appBean);
                         }
                     });
 
@@ -324,7 +327,9 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AppDetailActivity.startActivity(getContext());
+                            View itemView = holder.itemView;
+                            BaseApplication.getInstance().setView(itemView);
+                            AppDetailActivity.startActivity(getContext(),appBean);
                         }
                     });
 

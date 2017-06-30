@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxy.shop.R;
+import com.lxy.shop.common.base.BaseApplication;
 import com.lxy.shop.common.base.BaseFragment;
 import com.lxy.shop.common.rx.PageBean;
 import com.lxy.shop.databinding.FragmentRankingBinding;
@@ -18,6 +19,7 @@ import com.lxy.shop.ui.detail.AppDetailActivity;
 import com.lxy.shop.ui.ranking.adapter.RankAdapter;
 import com.lxy.shop.ui.ranking.contract.RankingContract;
 import com.lxy.shop.ui.recommend.AppBean;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +85,10 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                AppBean appBean = mList.get(position);
 
-                AppDetailActivity.startActivity(getContext());
+                BaseApplication.getInstance().setView(view);
+                AppBean appBean = mList.get(position);
+                AppDetailActivity.startActivity(getContext(),appBean);
             }
         });
     }

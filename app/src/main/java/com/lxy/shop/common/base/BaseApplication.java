@@ -1,6 +1,7 @@
 package com.lxy.shop.common.base;
 
 import android.app.Application;
+import android.view.View;
 
 import com.blankj.utilcode.util.Utils;
 import com.lxy.shop.di.component.AppComponent;
@@ -18,6 +19,7 @@ public class BaseApplication extends Application {
 
     private static BaseApplication sInstance;
     private AppComponent mAppComponent;
+    private View mView;
 
     public static BaseApplication getInstance() {
 
@@ -38,6 +40,15 @@ public class BaseApplication extends Application {
     public AppComponent getAppComponent() {
 
         return mAppComponent;
+    }
+
+    public void setView(View view){
+        mView = view;
+    }
+
+    public View getView(){
+
+        return mView;
     }
 
 }

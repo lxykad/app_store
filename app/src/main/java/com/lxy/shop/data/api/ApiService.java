@@ -52,4 +52,8 @@ public interface ApiService {
     //登录
     @POST("login")
     Observable<BaseBean<LoginBean>> login(@Body LoginRequestBean param);
+
+    //yin应用详情
+    @GET("app/{id}")
+    Observable<BaseBean<AppBean>> getAppDetail(@Path("id") int id);
 }
