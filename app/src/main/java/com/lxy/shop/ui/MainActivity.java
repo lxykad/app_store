@@ -1,7 +1,6 @@
 package com.lxy.shop.ui;
 
 import android.content.Intent;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.CacheUtils;
 import com.bumptech.glide.Glide;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseActivity;
@@ -19,6 +17,7 @@ import com.lxy.shop.common.user.User;
 import com.lxy.shop.databinding.ActivityMainBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.ui.classify.ClassifyFragment;
+import com.lxy.shop.ui.download.DownLoadManagerActivity;
 import com.lxy.shop.ui.game.GameFragment;
 import com.lxy.shop.ui.login.LoginActivity;
 import com.lxy.shop.ui.login.event.LogoutEvent;
@@ -130,7 +129,8 @@ public class MainActivity extends BaseActivity {
                         break;
                     case R.id.menu_message:
 
-                        showToast("message");
+                        Intent intent = new Intent(MainActivity.this, DownLoadManagerActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.menu_setting:
 

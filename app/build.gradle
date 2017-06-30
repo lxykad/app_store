@@ -41,7 +41,7 @@ android {
 
     signingConfigs{
         keystore{
-          //  defaultSignConfig
+            //  defaultSignConfig
         }
     }
 
@@ -49,7 +49,7 @@ android {
         release {
             minifyEnabled false
             debuggable true
-           // signingConfig signingConfigs.defaultSignConfig
+            // signingConfig signingConfigs.defaultSignConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "bool", "DEBUG", 'true'
             resValue "bool", "FLAVOR", 'false'

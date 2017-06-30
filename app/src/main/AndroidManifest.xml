@@ -38,6 +38,8 @@
         <activity
             android:name=".ui.detail.AppDetailActivity"
             android:theme="@style/Activity.Transparent" />
+
+        <activity android:name=".ui.download.DownLoadManagerActivity"/>
     </application>
 
 </manifest>
