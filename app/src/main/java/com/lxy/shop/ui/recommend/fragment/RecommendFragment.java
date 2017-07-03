@@ -27,6 +27,7 @@ import com.lxy.shop.ui.recommend.adapter.RecommendAdapter;
 import com.lxy.shop.ui.recommend.bean.RecommendBean;
 import com.lxy.shop.ui.recommend.contract.RecommendContract;
 import com.lxy.shop.widget.BannerImageLoader;
+import com.lxy.shop.widget.DownloadProgressButton;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
@@ -240,7 +241,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     super.onBindViewHolder(holder, position);
 
                     final AppBean appBean = mAppList.get(position);
-                    Button dl = (Button) holder.itemView.findViewById(R.id.btn_dl);
+                    DownloadProgressButton dl = (DownloadProgressButton) holder.itemView.findViewById(R.id.btn_dl);
                     TextView title = (TextView) holder.itemView.findViewById(R.id.text_title);
                     TextView size = (TextView) holder.itemView.findViewById(R.id.text_size);
                     ImageView img = (ImageView) holder.itemView.findViewById(R.id.img_icon);
@@ -306,7 +307,7 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
                     super.onBindViewHolder(holder, position);
 
                     final AppBean appBean = mGameList.get(position);
-                    Button download = (Button) holder.itemView.findViewById(R.id.btn_dl);
+                    DownloadProgressButton download = (DownloadProgressButton) holder.itemView.findViewById(R.id.btn_dl);
 
 
                     TextView title = (TextView) holder.itemView.findViewById(R.id.text_title);

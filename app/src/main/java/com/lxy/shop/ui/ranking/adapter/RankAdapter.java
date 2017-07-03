@@ -40,7 +40,5 @@ public class RankAdapter extends BaseQuickAdapter<AppBean, BaseViewHolder> {
 
         ImageView img = (ImageView) holder.itemView.findViewById(R.id.img_icon);
         Glide.with(mContext).load(baseImgUrl + bean.icon).into(img);
-
-
     }
 }
