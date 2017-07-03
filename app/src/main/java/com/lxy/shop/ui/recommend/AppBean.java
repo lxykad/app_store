@@ -1,6 +1,7 @@
 package com.lxy.shop.ui.recommend;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.lxy.shop.ui.download.bean.AppDownloadInfo;
 
 import java.io.Serializable;
 
@@ -38,6 +39,8 @@ public class AppBean implements Serializable, MultiItemEntity {
 
     public int mItemType;
 
+    public AppDownloadInfo mAppDownloadInfo;
+
     @Override
     public String toString() {
         return "AppBean{" +
@@ -67,6 +70,10 @@ public class AppBean implements Serializable, MultiItemEntity {
                 ", versionName='" + versionName + '\'' +
                 ", videoId=" + videoId +
                 '}';
+    }
+
+    public AppBean() {
+
     }
 
     public AppBean(int itemType) {

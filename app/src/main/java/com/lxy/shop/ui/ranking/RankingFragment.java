@@ -29,7 +29,7 @@ import java.util.Map;
  * Created by lxy on 2017/6/8.
  */
 
-public class RankingFragment extends BaseFragment<RankingPresenter> implements RankingContract.AppinfoView, BaseQuickAdapter.RequestLoadMoreListener,SwipeRefreshLayout.OnRefreshListener {
+public class RankingFragment extends BaseFragment<RankingPresenter> implements RankingContract.AppinfoView, BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     private FragmentRankingBinding mRankBinding;
     private RankAdapter mAdapter;
@@ -74,7 +74,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     public void initChildBinding() {
         mRankBinding = (FragmentRankingBinding) mChildBinding;
         mList = new ArrayList<>();
-        mAdapter = new RankAdapter(R.layout.list_item_recommend_fragment, mList);
+        mAdapter = new RankAdapter(R.layout.list_item_recommend_fragment, mList, getContext());
 
         mRankBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRankBinding.recyclerView.setAdapter(mAdapter);
@@ -88,9 +88,17 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
 
                 BaseApplication.getInstance().setView(view);
                 AppBean appBean = mList.get(position);
-                AppDetailActivity.startActivity(getContext(),appBean);
+                AppDetailActivity.startActivity(getContext(), appBean);
             }
         });
+
+        /*mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+                showToast(""+view.getClass().getSimpleName());
+            }
+        });*/
     }
 
     @Override
@@ -104,7 +112,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
 
         List<AppBean> list = pageBean.getDatas();
 
-        if (mPage==0) {
+        if (mPage == 0) {
 
         }
 
