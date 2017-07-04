@@ -196,6 +196,7 @@ public class AppUtils {
     }
 
     public static boolean isInstalled(Context context, String packageName) {
+
         boolean installed = false;
         if (TextUtils.isEmpty(packageName)) {
             return false;

@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseApplication;
@@ -74,7 +75,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     public void initChildBinding() {
         mRankBinding = (FragmentRankingBinding) mChildBinding;
         mList = new ArrayList<>();
-        mAdapter = new RankAdapter(R.layout.list_item_recommend_fragment, mList, getContext());
+        mAdapter = new RankAdapter(R.layout.list_item_recommend_fragment, mList, getActivity());
 
         mRankBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRankBinding.recyclerView.setAdapter(mAdapter);
@@ -127,18 +128,18 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     @Override
     public void onLoadMoreComplete() {
         mAdapter.loadMoreComplete();
-        System.out.println("load_more===========onLoadMoreComplete");
+        LogUtils.d("load_more===========onLoadMoreComplete");
     }
 
     @Override
     public void onLoadMoreRequested() {
-        System.out.println("load_more===========");
+        LogUtils.d("load_more===========");
         loadData();
     }
 
     @Override
     public void onRefresh() {
-        System.out.println("load_more===========onRefresh");
+        LogUtils.d("load_more===========onRefresh");
         mPage = 0;
         loadData();
     }

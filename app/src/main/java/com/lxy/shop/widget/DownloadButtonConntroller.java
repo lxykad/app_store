@@ -1,28 +1,42 @@
 package com.lxy.shop.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.lxy.shop.R;
+import com.lxy.shop.common.base.BaseApplication;
 import com.lxy.shop.common.constant.Constant;
+import com.lxy.shop.common.http.ParamsInterceptor;
 import com.lxy.shop.common.rx.BaseBean;
 import com.lxy.shop.common.rx.RxHttpResponse;
 import com.lxy.shop.common.rx.RxSchedulers;
+import com.lxy.shop.data.api.ApiService;
 import com.lxy.shop.ui.download.bean.AppDownloadInfo;
 import com.lxy.shop.ui.recommend.AppBean;
 import com.lxy.shop.util.AppUtils;
 import com.lxy.shop.util.PermissionUtil;
 import com.orhanobut.hawk.Hawk;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import zlc.season.rxdownload2.RxDownload;
@@ -39,12 +53,32 @@ public class DownloadButtonConntroller {
 
     private DownLoadAppApi mApi;
 
-    public DownloadButtonConntroller(RxDownload downloader) {
+    private Activity mActivity;
+
+    public DownloadButtonConntroller(RxDownload downloader, Activity activity) {
 
         this.mRxDownload = downloader;
+        mActivity = activity;
 
         if (mRxDownload != null) {
 
+            Gson gson = new Gson();
+
+            OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
+            okHttpBuilder
+                    .addInterceptor(new ParamsInterceptor(BaseApplication.getInstance(), gson))
+                    // 连接超时时间设置
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    // 读取超时时间设置
+                    .readTimeout(10, TimeUnit.SECONDS);
+
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl(ApiService.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(okHttpBuilder.build());
+
+            mApi = builder.build().create(DownLoadAppApi.class);
 
             // mApi = mRxDownload.getRetrofit().create(DownLoadAppApi.class);
         }
@@ -61,58 +95,57 @@ public class DownloadButtonConntroller {
 
     public void handClick(final DownloadProgressButton btn, final AppBean AppBean) {
 
-
         if (mApi == null) {
 
-            //return;
+            //Toast.makeText(btn.getContext(), "api: " + mApi, Toast.LENGTH_SHORT).show();
+            return;
         }
 
         isAppInstalled(btn.getContext(), AppBean)
 
-                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
-                    @Override
-                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event)
-                            throws Exception {
+//                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
+//                    @Override
+//                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event)
+//                            throws Exception {
+//
+//                        if (DownloadFlag.NORMAL == event.getFlag()) {//未安装
+//
+//                            return isApkFileExsit(btn.getContext(), AppBean);
+//
+//                        }
+//                        return Observable.just(event);
+//
+//                    }
+//                })
+//                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
+//                    @Override
+//                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event) throws Exception {
+//
+//                        if (DownloadFlag.NORMAL == event.getFlag()) {
+//
+//                            return getAppDownloadInfo(AppBean)
+//                                    .flatMap(new Function<AppDownloadInfo, ObservableSource<DownloadEvent>>() {
+//                                        @Override
+//                                        public ObservableSource<DownloadEvent> apply(@NonNull AppDownloadInfo appDownloadInfo) throws Exception {
+//
+//                                            AppBean.mAppDownloadInfo = appDownloadInfo;
+//
+//                                            return receiveDownloadStatus(appDownloadInfo.getDownloadUrl());
+//                                        }
+//                                    });
+//
+//                        }
+//
+//                        return Observable.just(event);
+//                    }
+//                })
 
-                        if (DownloadFlag.NORMAL == event.getFlag()) {//
-
-                            return isApkFileExsit(btn.getContext(), AppBean);
-
-                        }
-                        return Observable.just(event);
-
-                    }
-                })
-                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
-                    @Override
-                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event) throws Exception {
-
-
-                        if (DownloadFlag.NORMAL == event.getFlag()) {
-
-                            return getAppDownloadInfo(AppBean)
-                                    .flatMap(new Function<AppDownloadInfo, ObservableSource<DownloadEvent>>() {
-                                        @Override
-                                        public ObservableSource<DownloadEvent> apply(@NonNull AppDownloadInfo appDownloadInfo) throws Exception {
-
-                                            AppBean.mAppDownloadInfo = appDownloadInfo;
-
-                                            return receiveDownloadStatus(appDownloadInfo.getDownloadUrl());
-                                        }
-                                    });
-
-                        }
-
-                        return Observable.just(event);
-                    }
-                })
                 .compose(RxSchedulers.<DownloadEvent>io_main())
-                //   .subscribeOn(Schedulers.io())
-                //   .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DownloadConsumer(btn, AppBean));
 
     }
 
+    //按钮的点击事件
     private void bindClick(final DownloadProgressButton btn, final AppBean AppBean) {
 
         RxView.clicks(btn).subscribe(new Consumer<Object>() {
@@ -121,16 +154,14 @@ public class DownloadButtonConntroller {
             public void accept(@NonNull Object o) throws Exception {
 
                 int flag = (int) btn.getTag(R.id.tag_apk_flag);
-                Toast.makeText(btn.getContext(), flag + "", Toast.LENGTH_SHORT).show();
 
                 switch (flag) {
 
                     case DownloadFlag.INSTALLED:
-
                         runApp(btn.getContext(), AppBean.packageName);
                         break;
 
-                    // 升级 还加上去
+                    // 升级 未处理
 
                     case DownloadFlag.STARTED:
                         pausedDownload(AppBean.mAppDownloadInfo.getDownloadUrl());
@@ -161,19 +192,20 @@ public class DownloadButtonConntroller {
         }
     }
 
+    // 动态权限申请
     private void startDownload(final DownloadProgressButton btn, final AppBean AppBean) {
 
-/*
-        PermissionUtil.requestPermisson(btn.getContext(), WRITE_EXTERNAL_STORAGE)
+        PermissionUtil.requestPermisson(mActivity, WRITE_EXTERNAL_STORAGE)
 
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(@NonNull Boolean aBoolean) throws Exception {
 
-
-                        if (aBoolean) {
+                        if (aBoolean) { // 授权
 
                             final AppDownloadInfo downloadInfo = AppBean.mAppDownloadInfo;
+
+                            Toast.makeText(btn.getContext(), downloadInfo + "", Toast.LENGTH_SHORT).show();
 
                             if (downloadInfo == null) {
 
@@ -186,6 +218,7 @@ public class DownloadButtonConntroller {
                                         download(btn, AppBean);
 
                                     }
+
                                 });
                             } else {
 
@@ -195,11 +228,10 @@ public class DownloadButtonConntroller {
 
                     }
                 });
-*/
-
 
     }
 
+    //下载app
     private void download(DownloadProgressButton btn, AppBean info) {
 
 
@@ -265,6 +297,7 @@ public class DownloadButtonConntroller {
 
         DownloadEvent event = new DownloadEvent();
 
+        // 耗时操作，待优化
         event.setFlag(AppUtils.isInstalled(context, AppBean.packageName) ? DownloadFlag.INSTALLED : DownloadFlag.NORMAL);
 
         return Observable.just(event);
@@ -292,15 +325,13 @@ public class DownloadButtonConntroller {
         return mRxDownload.receiveDownloadStatus(url);
     }
 
-
     public Observable<AppDownloadInfo> getAppDownloadInfo(AppBean AppBean) {
 
         return mApi.getAppDownloadInfo(AppBean.id).compose(RxHttpResponse.handResult());
     }
 
-
+    // 适配器列表 及下载状态处理
     class DownloadConsumer implements Consumer<DownloadEvent> {
-
 
         DownloadProgressButton btn;
 
@@ -318,7 +349,6 @@ public class DownloadButtonConntroller {
             int flag = event.getFlag();
 
             btn.setTag(R.id.tag_apk_flag, flag);
-            LogUtils.d("flag========" + flag);
 
             bindClick(btn, mAppBean);
 
@@ -330,6 +360,7 @@ public class DownloadButtonConntroller {
 
                 case DownloadFlag.NORMAL:
                     btn.download();
+                    //btn.setText("下载");
                     break;
 
                 case DownloadFlag.STARTED:
@@ -351,7 +382,6 @@ public class DownloadButtonConntroller {
                 case DownloadFlag.DELETED: //已删除
 
                     break;
-
             }
 
         }

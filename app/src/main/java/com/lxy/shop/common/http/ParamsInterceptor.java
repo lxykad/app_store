@@ -3,6 +3,7 @@ package com.lxy.shop.common.http;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.lxy.shop.common.constant.Constant;
@@ -43,7 +44,6 @@ public class ParamsInterceptor implements Interceptor {
 
     }
 
-
     @Override
     public Response intercept(Chain chain) throws IOException {
 
@@ -63,6 +63,7 @@ public class ParamsInterceptor implements Interceptor {
             commomParamsMap.put(Constant.DENSITY_SCALE_FACTOR, mContext.getResources().getDisplayMetrics().density + "");
 
             String token = Hawk.get(Constant.TOKEN, "");
+            LogUtils.d("token=======" + token);
             commomParamsMap.put(Constant.TOKEN, token);
 
             if (method.equals("GET")) {

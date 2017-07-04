@@ -1,5 +1,6 @@
 package com.lxy.shop.ui.ranking.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -29,10 +30,10 @@ public class RankAdapter extends BaseQuickAdapter<AppBean, BaseViewHolder> {
 
     private DownloadButtonConntroller mDownloadButtonConntroller;
 
-    public RankAdapter(@LayoutRes int layoutResId, @Nullable List<AppBean> data, Context context) {
+    public RankAdapter(@LayoutRes int layoutResId, @Nullable List<AppBean> data, Activity context) {
         super(layoutResId, data);
 
-        mDownloadButtonConntroller = new DownloadButtonConntroller(RxDownload.getInstance(context));
+        mDownloadButtonConntroller = new DownloadButtonConntroller(RxDownload.getInstance(context),context);
         mList = data;
     }
 

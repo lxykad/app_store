@@ -1,5 +1,6 @@
 package com.lxy.shop.common.rx;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.lxy.shop.common.exception.ApiException;
 
 import io.reactivex.Observable;
@@ -43,11 +44,12 @@ public class RxHttpResponse {
                                 public void subscribe(ObservableEmitter<T> emitter) throws Exception {
                                     emitter.onNext(tBaseBean.data);
                                     emitter.onComplete();
+                                    LogUtils.d("http======success");
                                 }
                             });
 
                         } else {//请求失败
-
+                            LogUtils.d("http======error: "+tBaseBean.message);
                             return Observable.error(new ApiException(tBaseBean.status, tBaseBean.message));
                         }
 
