@@ -6,6 +6,7 @@ import android.view.View;
 import com.blankj.utilcode.util.LogUtils;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseFragment;
+import com.lxy.shop.common.base.BasePresenter;
 import com.lxy.shop.databinding.FragmentDownloadedBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.ui.download.downloaded.adapter.DownLoadedAdapter;
@@ -21,7 +22,7 @@ import zlc.season.rxdownload2.entity.DownloadStatus;
  * Created by lxy on 2017/6/30.
  */
 
-public class DownLoadedFragment extends BaseFragment {
+public class DownLoadedFragment extends BaseFragment{
 
     private FragmentDownloadedBinding mBinding;
     private DownLoadedAdapter mAdapter;

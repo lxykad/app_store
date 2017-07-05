@@ -37,18 +37,20 @@ public class DownLoadedAdapter extends BaseQuickAdapter<DownloadRecord, BaseView
 
         holder.setText(R.id.tv, bean.getId() + "");
 
+        CheckBox checkBox = (CheckBox) holder.itemView.findViewById(R.id.cb);
+
         holder.setOnCheckedChangeListener(R.id.cb, new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(buttonView.getContext(), "选中: " + position, Toast.LENGTH_SHORT).show();
-                    if (!mCheckPositionlist.contains(new Integer(position))) {
-                        mCheckPositionlist.add(new Integer(position));
+                    //Toast.makeText(buttonView.getContext(), "选中: " + position, Toast.LENGTH_SHORT).show();
+                    if (!mCheckPositionlist.contains(new Integer((Integer) checkBox.getTag()))) {
+                        mCheckPositionlist.add(new Integer((Integer) checkBox.getTag()));
                     }
                 } else {
-                    Toast.makeText(buttonView.getContext(), "未选中: " + position, Toast.LENGTH_SHORT).show();
-                    if (mCheckPositionlist.contains(new Integer(position))) {
-                        mCheckPositionlist.remove(new Integer(position));
+                   // Toast.makeText(buttonView.getContext(), "未选中: " + position, Toast.LENGTH_SHORT).show();
+                    if (mCheckPositionlist.contains(new Integer((Integer) checkBox.getTag()))) {
+                        mCheckPositionlist.remove(new Integer((Integer) checkBox.getTag()));
                     }
                 }
             }
