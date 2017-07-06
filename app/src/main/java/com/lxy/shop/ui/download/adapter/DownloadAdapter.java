@@ -31,6 +31,8 @@ public class DownloadAdapter extends BaseQuickAdapter<DownloadRecord, BaseViewHo
         super(layoutResId, data);
 
         mDownloadButtonConntroller = new DownloadButtonConntroller(rxDownload, activity);
+
+        openLoadAnimation();
     }
 
     @Override

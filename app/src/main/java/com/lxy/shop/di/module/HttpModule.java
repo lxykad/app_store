@@ -48,11 +48,11 @@ public class HttpModule {
 
         if (BuildConfig.DEBUG) {
             // log用拦截器
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+    //        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             // 开发模式记录整个body，否则只记录基本信息如返回200，http协议版本等
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+   //         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            builder.addInterceptor(logging);
+    //        builder.addInterceptor(logging);
         }
 
         // 如果使用到HTTPS，我们需要创建SSLSocketFactory，并设置到client

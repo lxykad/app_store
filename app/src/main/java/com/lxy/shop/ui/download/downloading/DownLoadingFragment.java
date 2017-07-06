@@ -40,7 +40,6 @@ public class DownLoadingFragment extends BaseFragment<DownloadRecordPresenter> i
 
     @Override
     protected void firstVisiableToUser() {
-
         mPresenter.getRecords();
     }
 

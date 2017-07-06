@@ -80,7 +80,6 @@ public class DownloadButtonConntroller {
 
             mApi = builder.build().create(DownLoadAppApi.class);
 
-            // mApi = mRxDownload.getRetrofit().create(DownLoadAppApi.class);
         }
 
     }
@@ -102,43 +101,42 @@ public class DownloadButtonConntroller {
 
         isAppInstalled(btn.getContext(), AppBean)
 
-//                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
-//                    @Override
-//                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event)
-//                            throws Exception {
-//
-//                        if (DownloadFlag.NORMAL == event.getFlag()) {//未安装
-//
-//                            return isApkFileExsit(btn.getContext(), AppBean);
-//
-//                        }
-//                        return Observable.just(event);
-//
-//                    }
-//                })
-//                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
-//                    @Override
-//                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event) throws Exception {
-//
-//                        if (DownloadFlag.NORMAL == event.getFlag()) {
-//
-//                            return getAppDownloadInfo(AppBean)
-//                                    .flatMap(new Function<AppDownloadInfo, ObservableSource<DownloadEvent>>() {
-//                                        @Override
-//                                        public ObservableSource<DownloadEvent> apply(@NonNull AppDownloadInfo appDownloadInfo) throws Exception {
-//
-//                                            AppBean.mAppDownloadInfo = appDownloadInfo;
-//
-//                                            return receiveDownloadStatus(appDownloadInfo.getDownloadUrl());
-//                                        }
-//                                    });
-//
-//                        }
-//
-//                        return Observable.just(event);
-//                    }
-//                })
+                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
+                    @Override
+                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event)
+                            throws Exception {
 
+                        if (DownloadFlag.NORMAL == event.getFlag()) {//未安装
+
+                            return isApkFileExsit(btn.getContext(), AppBean);
+
+                        }
+                        return Observable.just(event);
+
+                    }
+                })
+                .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
+                    @Override
+                    public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event) throws Exception {
+
+                        if (DownloadFlag.NORMAL == event.getFlag()) {
+
+                            return getAppDownloadInfo(AppBean)
+                                    .flatMap(new Function<AppDownloadInfo, ObservableSource<DownloadEvent>>() {
+                                        @Override
+                                        public ObservableSource<DownloadEvent> apply(@NonNull AppDownloadInfo appDownloadInfo) throws Exception {
+
+                                            AppBean.mAppDownloadInfo = appDownloadInfo;
+
+                                            return receiveDownloadStatus(appDownloadInfo.getDownloadUrl());
+                                        }
+                                    });
+
+                        }
+
+                        return Observable.just(event);
+                    }
+                })
                 .compose(RxSchedulers.<DownloadEvent>io_main())
                 .subscribe(new DownloadConsumer(btn, AppBean));
 
