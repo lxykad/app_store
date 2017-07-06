@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxy.shop.R;
+import com.lxy.shop.common.apk.AndroidApk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +21,22 @@ import zlc.season.rxdownload2.entity.DownloadRecord;
  * Created by lxy on 2017/7/5.
  */
 
-public class DownLoadedAdapter extends BaseQuickAdapter<DownloadRecord, BaseViewHolder> {
+public class DownLoadedAdapter extends BaseQuickAdapter<AndroidApk, BaseViewHolder> {
 
     private List<Integer> mCheckPositionlist;
 
-    public DownLoadedAdapter(@LayoutRes int layoutResId, @Nullable List<DownloadRecord> data) {
+    public DownLoadedAdapter(@LayoutRes int layoutResId, @Nullable List<AndroidApk> data) {
         super(layoutResId, data);
 
         mCheckPositionlist = new ArrayList<>();
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, DownloadRecord bean) {
+    protected void convert(BaseViewHolder holder, AndroidApk bean) {
 
         int position = holder.getAdapterPosition();
 
-        holder.setText(R.id.tv, bean.getId() + "");
+        holder.setText(R.id.tv, bean.getAppName() + "");
 
         CheckBox checkBox = (CheckBox) holder.itemView.findViewById(R.id.cb);
 

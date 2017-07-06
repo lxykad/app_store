@@ -5,28 +5,37 @@ import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.lxy.shop.R;
+import com.lxy.shop.common.apk.AndroidApk;
 import com.lxy.shop.common.base.BaseFragment;
-import com.lxy.shop.common.base.BasePresenter;
+import com.lxy.shop.common.constant.Constant;
 import com.lxy.shop.databinding.FragmentDownloadedBinding;
 import com.lxy.shop.di.component.AppComponent;
 import com.lxy.shop.ui.download.downloaded.adapter.DownLoadedAdapter;
+import com.orhanobut.hawk.Hawk;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.List;
 
-import zlc.season.rxdownload2.entity.DownloadEvent;
-import zlc.season.rxdownload2.entity.DownloadFlag;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import zlc.season.rxdownload2.entity.DownloadRecord;
-import zlc.season.rxdownload2.entity.DownloadStatus;
 
 /**
  * Created by lxy on 2017/6/30.
  */
 
-public class DownLoadedFragment extends BaseFragment{
+public class DownLoadedFragment extends BaseFragment {
 
     private FragmentDownloadedBinding mBinding;
     private DownLoadedAdapter mAdapter;
-    private ArrayList<DownloadRecord> mList;
+    private ArrayList<AndroidApk> mList;
 
     @Override
     protected void visiableToUser() {
@@ -64,21 +73,63 @@ public class DownLoadedFragment extends BaseFragment{
 
         mList = new ArrayList<>();
 
-        for (int i = 0; i < 30; i++) {
-            DownloadRecord record = new DownloadRecord();
-            record.setId(i);
+        final String dir = Hawk.get(Constant.APK_DOWNLOAD_DIR, "");
 
-            if (i == 0) {
-                record.setFlag(DownloadFlag.NORMAL);
+        Observable.create(new ObservableOnSubscribe<List<AndroidApk>>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<List<AndroidApk>> e) throws Exception {
+                e.onNext(scanApks(dir));
+                e.onComplete();
             }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<List<AndroidApk>>() {
+            @Override
+            public void accept(@NonNull List<AndroidApk> androidApks) throws Exception {
 
-            mList.add(record);
+                mAdapter = new DownLoadedAdapter(R.layout.list_item_down_loaded, androidApks);
+                mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                mBinding.recyclerView.setAdapter(mAdapter);
+            }
+        });
 
+    }
+
+    public List<AndroidApk> scanApks(String dir) {
+
+        File file = new File(dir);
+
+        if (!file.isDirectory()) {
+
+            throw new RuntimeException("is not Dir");
         }
 
-        mAdapter = new DownLoadedAdapter(R.layout.list_item_down_loaded, mList);
-        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.recyclerView.setAdapter(mAdapter);
+        File[] apks = file.listFiles(new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+
+                if (f.isDirectory()) {
+                    return false;
+                }
+
+                return f.getName().endsWith(".apk");
+            }
+        });
+
+        List<AndroidApk> androidApks = new ArrayList<>();
+
+        for (File apk : apks) {
+
+            AndroidApk androidApk = AndroidApk.read(getContext(), apk.getPath());
+            if (androidApk != null)
+                androidApks.add(androidApk);
+        }
+
+        return androidApks;
+
     }
 
 }

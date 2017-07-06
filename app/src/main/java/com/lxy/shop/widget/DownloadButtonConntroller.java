@@ -97,7 +97,6 @@ public class DownloadButtonConntroller {
 
         if (mApi == null) {
 
-            //Toast.makeText(btn.getContext(), "api: " + mApi, Toast.LENGTH_SHORT).show();
             return;
         }
 
