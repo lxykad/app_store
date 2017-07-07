@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaCodecInfo;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -44,6 +46,24 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_app_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.app_detail) {
+            showToast("detail");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void setActivityComponent(AppComponent appComponent) {
 
     }
@@ -56,7 +76,7 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         mAppBean = (AppBean) getIntent().getSerializableExtra(APP_BEAN);
         mItemView = BaseApplication.getInstance().getView();
 
-       // mBinding.TemplateTitle.setTitleText(mAppBean.displayName);
+        // mBinding.TemplateTitle.setTitleText(mAppBean.displayName);
 
         initToolBar();
         initItem();
@@ -71,9 +91,19 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
 
     }
 
-    public void initToolBar(){
+    public void initToolBar() {
         setSupportActionBar(mBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //mBinding.toolbar.setTitle(mAppBean.displayName);
+        getSupportActionBar().setTitle(mAppBean.displayName);
+
+        mBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

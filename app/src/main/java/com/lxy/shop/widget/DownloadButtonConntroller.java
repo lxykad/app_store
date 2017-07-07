@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.google.gson.Gson;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.lxy.shop.R;
 import com.lxy.shop.common.base.BaseApplication;
 import com.lxy.shop.common.constant.Constant;
@@ -21,23 +19,15 @@ import com.lxy.shop.util.AppUtils;
 import com.lxy.shop.util.PermissionUtil;
 import com.orhanobut.hawk.Hawk;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
