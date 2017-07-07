@@ -2,4 +2,5 @@
 <resources>
     <item name="tag_apk_flag" type="id"/>
     <item name="tag_package_name" type="id"/>
+    <item name="BTN_POS" type="id">0x64</item>
 </resources>

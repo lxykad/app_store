@@ -47,6 +47,7 @@ public class DownloadAdapter extends BaseQuickAdapter<DownloadRecord, BaseViewHo
 
         DownloadProgressButton button = (DownloadProgressButton) holder.itemView.findViewById(R.id.btn_dl);
 
+
         mDownloadButtonConntroller.handClick(button, item);
     }
 }

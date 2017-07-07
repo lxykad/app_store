@@ -5,6 +5,8 @@ import com.lxy.shop.ui.download.bean.AppDownloadInfo;
 
 import java.io.Serializable;
 
+import zlc.season.rxdownload2.entity.DownloadEvent;
+
 /**
  * Created by lxy on 2017/5/11.
  */
@@ -40,6 +42,7 @@ public class AppBean implements Serializable, MultiItemEntity {
     public int mItemType;
 
     public AppDownloadInfo mAppDownloadInfo;
+    public int adapterPos;
 
     @Override
     public String toString() {
