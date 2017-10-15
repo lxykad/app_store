@@ -20,7 +20,10 @@ import com.lxy.shop.ui.detail.AppDetailActivity;
 import com.lxy.shop.ui.ranking.adapter.RankAdapter;
 import com.lxy.shop.ui.ranking.contract.RankingContract;
 import com.lxy.shop.ui.recommend.AppBean;
+import com.lxy.shop.widget.RefreshLayout;
 import com.orhanobut.hawk.Hawk;
+
+import org.eclipse.jdt.internal.compiler.env.ISourceField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,9 @@ import java.util.Map;
  * Created by lxy on 2017/6/8.
  */
 
-public class RankingFragment extends BaseFragment<RankingPresenter> implements RankingContract.AppinfoView, BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class RankingFragment extends BaseFragment<RankingPresenter> implements RankingContract.AppinfoView,
+        BaseQuickAdapter.RequestLoadMoreListener,
+        RefreshLayout.RefreshListener {
 
     private FragmentRankingBinding mRankBinding;
     private RankAdapter mAdapter;
@@ -52,11 +57,12 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     @Override
     protected void firstVisiableToUser() {
         //
-        loadData();
+        mRankBinding.swipRefreshLayout.setRefreshListener(this);
+        loadData(false);
     }
 
-    public void loadData() {
-        mPresenter.getRankData(mPage);
+    public void loadData(boolean isRefresh) {
+        mPresenter.getRankData(mPage, isRefresh);
     }
 
     @Override
@@ -81,8 +87,6 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
         mRankBinding.recyclerView.setAdapter(mAdapter);
         mAdapter.setOnLoadMoreListener(this, mRankBinding.recyclerView);
 
-        //mRankBinding.swipRefreshLayout.setOnRefreshListener(this);
-
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -104,7 +108,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
 
     @Override
     public void onEmptyClick(View view) {
-        loadData();
+        loadData(false);
     }
 
 
@@ -114,7 +118,7 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
         List<AppBean> list = pageBean.getDatas();
 
         if (mPage == 0) {
-
+            mList.clear();
         }
 
         mAdapter.addData(list);
@@ -122,6 +126,8 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
             mPage++;
         }
         mAdapter.setEnableLoadMore(pageBean.isHasMore());
+        mRankBinding.swipRefreshLayout.dismissRefreshing();
+        showToast(mList.size() + "");
 
     }
 
@@ -134,13 +140,14 @@ public class RankingFragment extends BaseFragment<RankingPresenter> implements R
     @Override
     public void onLoadMoreRequested() {
         LogUtils.d("load_more===========");
-        loadData();
+        mRankBinding.swipRefreshLayout.dismissRefreshing();
+        loadData(false);
     }
 
     @Override
-    public void onRefresh() {
-        LogUtils.d("load_more===========onRefresh");
+    public void refreshData() {
+        LogUtils.d("refresh===========onRefresh");
         mPage = 0;
-        loadData();
+        loadData(true);
     }
 }

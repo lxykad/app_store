@@ -73,9 +73,9 @@ android {
             zipAlignEnabled false
             shrinkResources false
 
-            ndk {
-                abiFilters "armeabi", "armeabi-v7a"
-            }
+//            ndk {
+//                abiFilters "armeabi", "armeabi-v7a"
+//            }
         }
 
     }

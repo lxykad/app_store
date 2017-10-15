@@ -24,11 +24,11 @@ public class RankingPresenter extends BasePresenter<RankingModel, RankingContrac
         super(mModel, mView);
     }
 
-    public void getRankData(int page) {
+    public void getRankData(int page,boolean isRefresh) {
 
         Observer observer = null;
 
-        if (page == 0) {//第一页
+        if (page == 0 && !isRefresh) {//第一页
 
             observer = new ProgressObserver<PageBean<AppBean>>(mContext, mView) {
 
